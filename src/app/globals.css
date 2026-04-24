@@ -1,0 +1,284 @@
+@import "tailwindcss";
+
+/* ── Dark Electric Blue Theme ── */
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #0f0f1a;
+  --bg-card: #13131f;
+  --bg-elevated: #1a1a2e;
+  --electric-blue: #2563eb;
+  --electric-blue-bright: #3b82f6;
+  --electric-glow: #60a5fa;
+  --accent-red: #ef4444;
+  --accent-yellow: #f59e0b;
+  --accent-green: #22c55e;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #475569;
+  --border: #1e2a3a;
+  --border-bright: #2563eb40;
+}
+
+/* ── Tailwind v4 Theme Extension ──
+   Maps CSS variables to Tailwind utility classes.
+   Usage: bg-bg-primary, text-electric-glow, border-border-bright, etc.
+*/
+@theme inline {
+  --color-bg-primary: var(--bg-primary);
+  --color-bg-secondary: var(--bg-secondary);
+  --color-bg-card: var(--bg-card);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-electric-blue: var(--electric-blue);
+  --color-electric-blue-bright: var(--electric-blue-bright);
+  --color-electric-glow: var(--electric-glow);
+  --color-accent-red: var(--accent-red);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-green: var(--accent-green);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-border-bright: var(--border-bright);
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Space Grotesk", sans-serif;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e2a3a;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+
+::selection {
+  background: rgba(37, 99, 235, 0.3);
+  color: #f1f5f9;
+}
+
+*:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(37, 99, 235, 0.5);
+  }
+}
+
+@keyframes pulseSlow {
+  0%,
+  100% {
+    opacity: 0.06;
+  }
+  50% {
+    opacity: 0.14;
+  }
+}
+
+@keyframes pingOnce {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes loadingSlide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+.animate-fade-in-scale {
+  animation: fadeInScale 0.3s ease-out forwards;
+}
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+.animate-pulse-slow {
+  animation: pulseSlow 4s ease-in-out infinite;
+}
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
+}
+.delay-400 {
+  animation-delay: 400ms;
+}
+.delay-500 {
+  animation-delay: 500ms;
+}
+
+.glass-card {
+  background: rgba(19, 19, 31, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+.border-glow {
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, 0.3),
+    0 0 20px rgba(37, 99, 235, 0.1);
+}
+
+.live-dot {
+  position: relative;
+  display: inline-flex;
+}
+.live-dot::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #ef4444;
+  animation: pingOnce 1.5s ease-out infinite;
+}
+
+.glass-card,
+.border-glow {
+  transition: all 0.2s ease;
+}
+
+.animate-fade-in,
+.animate-fade-in-scale,
+.animate-slide-in-right,
+.animate-slide-in-left {
+  opacity: 0;
+}
+
+.loading-slide {
+  animation: loadingSlide 1.2s ease-in-out infinite;
+}
+
+/* ── Utility Classes ── */
+.glow-blue {
+  box-shadow:
+    0 0 15px rgba(37, 99, 235, 0.3),
+    0 0 30px rgba(37, 99, 235, 0.1);
+}
+
+.glow-blue-sm {
+  box-shadow: 0 0 8px rgba(37, 99, 235, 0.2);
+}
+
+.glass {
+  background: rgba(19, 19, 31, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-bright);
+}
+
+.leaflet-popup-content-wrapper {
+  background: #13131f !important;
+  border: 1px solid #1e2a3a !important;
+  border-radius: 12px !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.15) !important;
+}
+
+.leaflet-popup-tip {
+  background: #13131f !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px !important;
+}
+
+.leaflet-container {
+  background: #0a0a0f !important;
+}
+
+.leaflet-control-zoom a {
+  background: #13131f !important;
+  color: #f1f5f9 !important;
+  border-color: #1e2a3a !important;
+}

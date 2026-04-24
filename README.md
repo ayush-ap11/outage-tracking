@@ -1,4 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚡ Urja System — Pune Power Outage Tracker
+
+Real-time power outage tracking for Pune, Maharashtra. Built to fill the gap where no live citizen-reporting platform exists for MSEDCL consumers.
+
+## Features
+
+- Live outage map (Leaflet.js, dark tiles)
+- GPS-based outage reporting with geo-tagging
+- Community confirmation voting
+- Admin dashboard for utility staff
+- Outage history + area-wise stats
+- Planned vs unplanned outage tracking
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- TypeScript
+- Tailwind CSS
+- Firebase (Firestore + Auth)
+- Leaflet.js
+- Vercel (deployment)
+
+## Getting Started
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Environment Variables
+
+Copy `.env.local.example` to `.env.local` and fill in your Firebase project credentials.
+
+## Demo Credentials
+
+- Citizen: any phone number + any 6-digit OTP
+- Admin: phone = `admin` | password = `admin123`
+
+## Deployment
+
+Connect the repo to Vercel, add the environment variables in the Vercel dashboard, then deploy.
+
+## Pages
+
+- `/` -> redirects based on auth
+- `/auth` -> citizen login
+- `/map` -> live outage map (protected)
+- `/report` -> report an outage (protected)
+- `/history` -> outage history + stats (protected)
+- `/profile` -> user profile (protected)
+- `/admin/login` -> admin login
+- `/admin/dashboard` -> admin control panel (admin only)
+
+## V2 Planned Features
+
+- Real OTP via Firebase Phone Auth
+- Push notifications via FCM
+- Marathi language toggle
+- MSEDCL / Urja System API integration
+- CSV export for admin
+- GeoJSON area boundaries
+
+Built by: Ayush
+College: Indira College of Engineering and Management
+Batch: 2023-2027This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
