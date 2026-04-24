@@ -73,17 +73,17 @@ export default function ReportPage() {
 
   return (
     <ProtectedRoute>
-      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#0a0a0f] p-4 lg:p-6">
+      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#f8fafc] p-4 lg:p-6">
         <div className="mx-auto max-w-7xl">
           <button
             onClick={() => router.back()}
             type="button"
-            className="self-start cursor-pointer text-2xl text-[#94a3b8] transition hover:text-white"
+            className="self-start cursor-pointer text-2xl text-[#475569] transition hover:text-[#0f172a]"
           >
             <ArrowLeft size={24} />
           </button>
           <div className="mt-2">
-            <h1 className="font-mono text-2xl font-bold text-white">
+            <h1 className="font-mono text-2xl font-bold text-[#0f172a]">
               Report Outage
             </h1>
             <p className="mt-1 text-sm text-[#475569]">
@@ -107,7 +107,7 @@ export default function ReportPage() {
               ) : (
                 <div className="space-y-4">
                   <Card className="animate-fade-in opacity-0 delay-100">
-                    <div className="mb-3 font-mono text-sm text-[#94a3b8]">
+                    <div className="mb-3 font-mono text-sm text-[#475569]">
                       <MapPin
                         className="mr-1 inline-block align-[-2px]"
                         size={14}
@@ -133,18 +133,18 @@ export default function ReportPage() {
                       )}
                     </Button>
                     {gpsError ? (
-                      <p className="mt-2 text-xs text-red-400">{gpsError}</p>
+                      <p className="mt-2 text-xs text-red-600">{gpsError}</p>
                     ) : null}
                     {location ? (
                       <div className="mt-3 rounded-lg border border-green-500/30 bg-green-500/20 p-3">
-                        <div className="text-sm text-green-400">
+                        <div className="text-sm text-green-700">
                           <CheckCircle
                             className="mr-1 inline-block align-[-2px]"
                             size={14}
                           />{" "}
                           Location detected
                         </div>
-                        <div className="mt-1 font-mono text-xs text-[#60a5fa]">
+                        <div className="mt-1 font-mono text-xs text-[#1d4ed8]">
                           Lat: {location.lat.toFixed(4)} | Lng:{" "}
                           {location.lng.toFixed(4)}
                         </div>
@@ -153,7 +153,7 @@ export default function ReportPage() {
                   </Card>
 
                   <Card className="animate-fade-in opacity-0 delay-200">
-                    <div className="mb-3 font-mono text-sm text-[#94a3b8]">
+                    <div className="mb-3 font-mono text-sm text-[#475569]">
                       <Zap
                         className="mr-1 inline-block align-[-2px]"
                         size={14}
@@ -163,7 +163,7 @@ export default function ReportPage() {
                     <div className="grid grid-cols-2 gap-3">
                       <button
                         onClick={() => setType("planned")}
-                        className={`active:scale-95 cursor-pointer w-full rounded-lg border p-3 font-mono text-sm transition-all duration-200 ${type === "planned" ? "border-[#2563eb] bg-[#2563eb] text-white" : "border-[#1e2a3a] bg-transparent text-[#94a3b8] hover:border-[#2563eb]/50"}`}
+                        className={`active:scale-95 cursor-pointer w-full rounded-lg border p-3 font-mono text-sm transition-all duration-200 ${type === "planned" ? "border-[#2563eb] bg-[#2563eb] text-white" : "border-[#e2e8f0] bg-[#ffffff] text-[#475569] hover:border-[#2563eb]/50"}`}
                       >
                         <div className="inline-flex items-center gap-2">
                           <Calendar size={14} /> Planned
@@ -174,7 +174,7 @@ export default function ReportPage() {
                       </button>
                       <button
                         onClick={() => setType("unplanned")}
-                        className={`active:scale-95 cursor-pointer w-full rounded-lg border p-3 font-mono text-sm transition-all duration-200 ${type === "unplanned" ? "border-red-600 bg-red-600 text-white" : "border-[#1e2a3a] bg-transparent text-[#94a3b8] hover:border-[#2563eb]/50"}`}
+                        className={`active:scale-95 cursor-pointer w-full rounded-lg border p-3 font-mono text-sm transition-all duration-200 ${type === "unplanned" ? "border-red-600 bg-red-600 text-white" : "border-[#e2e8f0] bg-[#ffffff] text-[#475569] hover:border-[#2563eb]/50"}`}
                       >
                         <div className="inline-flex items-center gap-2">
                           <Zap size={14} /> Unplanned
@@ -187,7 +187,7 @@ export default function ReportPage() {
                   </Card>
 
                   <Card className="animate-fade-in opacity-0 delay-300">
-                    <div className="mb-3 font-mono text-sm text-[#94a3b8]">
+                    <div className="mb-3 font-mono text-sm text-[#475569]">
                       <FileText
                         className="mr-1 inline-block align-[-2px]"
                         size={14}
@@ -199,7 +199,7 @@ export default function ReportPage() {
                       onChange={(e) => setDescription(e.target.value)}
                       maxLength={200}
                       placeholder="e.g. Complete power cut since 7 AM, transformer issue near main road..."
-                      className="h-24 w-full resize-none rounded-lg border border-[#1e2a3a] bg-[#0f0f1a] px-4 py-3 text-sm text-white transition-all duration-200 placeholder-[#475569] focus:border-[#2563eb] focus:outline-none focus:shadow-[0_0_0_2px_rgba(37,99,235,0.2)]"
+                      className="h-24 w-full resize-none rounded-lg border border-[#e2e8f0] bg-[#ffffff] px-4 py-3 text-sm text-[#0f172a] transition-all duration-200 placeholder-[#94a3b8] focus:border-[#2563eb] focus:outline-none focus:shadow-[0_0_0_2px_rgba(37,99,235,0.2)]"
                     />
                     <div className="mt-1 text-right text-xs text-[#475569]">
                       {description.length}/200
@@ -207,7 +207,7 @@ export default function ReportPage() {
                   </Card>
 
                   {error ? (
-                    <div className="text-center text-sm text-red-400">
+                    <div className="text-center text-sm text-red-600">
                       {error}
                     </div>
                   ) : null}
@@ -235,7 +235,7 @@ export default function ReportPage() {
 
             <div className="order-2 flex-1 lg:min-h-0">
               <div
-                className="rounded-xl border border-[#1e2a3a] bg-[#0f0f1a] p-3 lg:h-[min(70vh,680px)]"
+                className="rounded-xl border border-[#e2e8f0] bg-[#ffffff] p-3 lg:h-[min(70vh,680px)]"
                 style={{ height: 280 }}
               >
                 <ReportMap

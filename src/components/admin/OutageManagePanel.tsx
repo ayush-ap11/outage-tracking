@@ -20,10 +20,10 @@ const STATUSES: OutageStatus[] = [
   "resolved",
 ];
 const STATUS_STYLES: Record<OutageStatus, string> = {
-  reported: "border-red-500/30 text-red-400",
-  acknowledged: "border-yellow-500/30 text-yellow-400",
-  in_progress: "border-blue-500/30 text-blue-400",
-  resolved: "border-green-500/30 text-green-400",
+  reported: "border-red-500/30 text-red-600",
+  acknowledged: "border-yellow-500/30 text-yellow-600",
+  in_progress: "border-blue-500/30 text-blue-700",
+  resolved: "border-green-500/30 text-green-700",
 };
 
 export default function OutageManagePanel({
@@ -48,8 +48,8 @@ export default function OutageManagePanel({
     return (
       <div className="flex h-full items-center justify-center p-6 text-center">
         <div>
-          <ArrowLeft className="mx-auto text-[#94a3b8]" size={40} />
-          <div className="mt-2 font-mono text-sm text-[#475569]">
+          <ArrowLeft className="mx-auto text-[#475569]" size={40} />
+          <div className="mt-2 overflow-hidden font-mono text-sm text-[#475569]">
             Select an outage from the list
           </div>
         </div>
@@ -57,22 +57,22 @@ export default function OutageManagePanel({
     );
 
   return (
-    <div className="h-full overflow-y-auto p-4">
+    <div className="h-full max-h-full overflow-y-auto p-4">
       <div className="mb-3">
-        <h2 className="font-mono text-xl font-bold text-white">
+        <h2 className="truncate overflow-hidden text-ellipsis font-mono text-xl font-bold text-[#0f172a]">
           {outage.area}
         </h2>
         <div className="mt-2 flex flex-wrap gap-2">
           <Badge variant={outage.type}>{getTypeLabel(outage.type)}</Badge>
           <Badge variant={outage.status}>{getStatusLabel(outage.status)}</Badge>
         </div>
-        <p className="mt-2 text-xs text-[#475569]">
+        <p className="mt-2 overflow-hidden text-xs text-[#475569]">
           Reported {formatTimestamp(outage.timestamp)}
         </p>
       </div>
       <OutageDetail outage={outage} showConfirmButton={false} />
       <Card className="mt-4">
-        <div className="mb-3 text-sm font-mono text-[#94a3b8]">
+        <div className="mb-3 text-sm font-mono text-[#475569]">
           <Settings className="mr-1 inline-block align-[-2px]" size={14} />{" "}
           Admin Actions
         </div>
@@ -95,7 +95,7 @@ export default function OutageManagePanel({
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="e.g. Our team is on site, power will be restored by 4 PM..."
-          className="h-20 w-full resize-none rounded-lg border border-[#1e2a3a] bg-[#0f0f1a] px-4 py-3 text-sm text-white placeholder-[#475569] focus:border-[#2563eb] focus:outline-none"
+          className="h-20 w-full resize-none rounded-lg border border-[#e2e8f0] bg-[#ffffff] px-4 py-3 text-sm text-[#0f172a] placeholder-[#94a3b8] focus:border-[#2563eb] focus:outline-none"
         />
         <Button
           className="mt-3 w-full justify-center"
@@ -103,13 +103,13 @@ export default function OutageManagePanel({
         >
           <Megaphone size={14} /> Post Update
         </Button>
-        <hr className="my-4 border-[#1e2a3a]" />
-        <div className="mb-2 font-mono text-xs uppercase tracking-widest text-red-400/70">
+        <hr className="my-4 border-[#e2e8f0]" />
+        <div className="mb-2 font-mono text-xs uppercase tracking-widest text-red-700/70">
           Danger Zone
         </div>
         {showDeleteConfirm ? (
           <div className="animate-fade-in-scale rounded-lg border border-red-500/30 bg-red-500/10 p-3">
-            <p className="text-sm text-red-400">
+            <p className="text-sm text-red-600">
               Are you sure? This cannot be undone.
             </p>
             <div className="mt-3 flex gap-2">

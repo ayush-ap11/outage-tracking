@@ -15,7 +15,7 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 
 const inputClass =
-  "w-full rounded-lg border border-[#1e2a3a] bg-[#0f0f1a] px-4 py-3 font-mono text-sm text-white placeholder-[#475569] focus:border-[#2563eb] focus:outline-none";
+  "w-full rounded-lg border border-[#e2e8f0] bg-[#ffffff] px-4 py-3 font-mono text-sm text-[#0f172a] placeholder-[#94a3b8] focus:border-[#2563eb] focus:outline-none";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
 
   return (
     <div
-      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#070b14] px-4"
+      className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f8fafc] px-4"
       style={{
         backgroundImage:
           "linear-gradient(rgba(37,99,235,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.03) 1px, transparent 1px)",
@@ -74,17 +74,17 @@ export default function AdminLoginPage() {
         <form onSubmit={submit} className="space-y-4">
           <div className="text-center">
             <ShieldCheck className="mx-auto text-[#3b82f6]" size={40} />
-            <h1 className="mt-2 font-mono text-2xl font-bold text-white">
+            <h1 className="mt-2 font-mono text-2xl font-bold text-[#0f172a]">
               Admin Portal
             </h1>
             <p className="text-sm text-[#475569]">
               Urja System — Utility Dashboard
             </p>
-            <p className="mt-1 text-xs text-red-400/70">
+            <p className="mt-1 text-xs text-red-700/70">
               Authorized personnel only
             </p>
           </div>
-          <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2 text-center text-xs text-red-400">
+          <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-2 text-center text-xs text-red-600">
             <TriangleAlert
               className="mr-1 inline-block align-[-2px]"
               size={12}
@@ -92,7 +92,7 @@ export default function AdminLoginPage() {
             This portal is for electricity utility staff only
           </div>
           <div>
-            <label className="mb-1 block text-xs text-[#94a3b8]">
+            <label className="mb-1 block text-xs text-[#475569]">
               Admin Phone
             </label>
             <input
@@ -103,7 +103,7 @@ export default function AdminLoginPage() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs text-[#94a3b8]">
+            <label className="mb-1 block text-xs text-[#475569]">
               Password
             </label>
             <div className="relative">
@@ -117,13 +117,13 @@ export default function AdminLoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword((value) => !value)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-sm text-[#94a3b8]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-sm text-[#475569]"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
           </div>
-          <div className="rounded-lg border border-[#2563eb]/20 bg-[#1a1a2e] p-3 text-xs text-[#60a5fa]">
+          <div className="rounded-lg border border-[#2563eb]/20 bg-[#e2e8f0] p-3 text-xs text-[#1d4ed8]">
             <div>
               <ShieldAlert
                 className="mr-1 inline-block align-[-2px]"
@@ -142,12 +142,12 @@ export default function AdminLoginPage() {
             <ShieldCheck size={16} /> Admin Login
           </Button>
           {error ? (
-            <p className="text-center text-sm text-red-400">{error}</p>
+            <p className="text-center text-sm text-red-600">{error}</p>
           ) : null}
           <button
             type="button"
             onClick={() => router.push("/auth")}
-            className="block w-full cursor-pointer text-left text-xs text-[#475569] hover:text-white"
+            className="block w-full cursor-pointer text-left text-xs text-[#475569] hover:text-[#0f172a]"
           >
             <span className="inline-flex items-center gap-1">
               <ArrowLeft size={12} /> Back to citizen portal

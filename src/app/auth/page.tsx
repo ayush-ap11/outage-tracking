@@ -37,10 +37,10 @@ export default function AuthPage() {
   };
 
   const inputClass =
-    "w-full bg-[#0f0f1a] border border-[#1e2a3a] rounded-lg px-4 py-3 text-white font-mono placeholder-[#475569] text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_2px_rgba(37,99,235,0.2)] transition-all duration-200";
+    "w-full bg-[#ffffff] border border-[#e2e8f0] rounded-lg px-4 py-3 text-[#0f172a] font-mono placeholder-[#94a3b8] text-sm focus:outline-none focus:border-[#2563eb] focus:shadow-[0_0_0_2px_rgba(37,99,235,0.2)] transition-all duration-200";
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#0a0a0f] px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f8fafc] px-4">
       <style jsx global>{`
         @keyframes pulse-slow {
           0%,
@@ -68,7 +68,7 @@ export default function AuthPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="mb-6 text-center">
           <Zap className="mx-auto text-[#3b82f6]" size={40} />
-          <h1 className="mt-2 font-mono text-2xl font-bold text-white">
+          <h1 className="mt-2 font-mono text-2xl font-bold text-[#0f172a]">
             Urja System
           </h1>
           <p className="text-sm text-[#475569]">Pune Power Outage Tracker</p>
@@ -76,13 +76,13 @@ export default function AuthPage() {
         </div>
 
         <Card>
-          <h2 className="text-xl font-semibold text-white">Sign In</h2>
-          <p className="mb-6 text-sm text-[#94a3b8]">
+          <h2 className="text-xl font-semibold text-[#0f172a]">Sign In</h2>
+          <p className="mb-6 text-sm text-[#334155]">
             Enter your phone number to continue
           </p>
 
           <div className="mb-4">
-            <label className="mb-1 block text-xs text-[#94a3b8]">
+            <label className="mb-1 block text-xs text-[#334155]">
               Phone Number
             </label>
             <input
@@ -94,8 +94,8 @@ export default function AuthPage() {
             />
           </div>
 
-          <div className="mb-4 rounded-lg border border-[#2563eb]/20 bg-[#1a1a2e] p-3">
-            <p className="text-xs text-[#60a5fa]">
+          <div className="mb-4 rounded-lg border border-[#2563eb]/20 bg-[#e2e8f0] p-3">
+            <p className="text-xs text-[#1d4ed8]">
               <BadgeInfo className="mr-1 inline-block align-[-2px]" size={12} />{" "}
               Mock OTP: Enter any 6-digit number
             </p>
@@ -107,7 +107,7 @@ export default function AuthPage() {
 
           {otpSent && (
             <div className="mb-4">
-              <label className="mb-1 block text-xs text-[#94a3b8]">
+              <label className="mb-1 block text-xs text-[#334155]">
                 Enter OTP
               </label>
               <input
@@ -141,9 +141,9 @@ export default function AuthPage() {
           )}
 
           <div className="my-5 flex items-center gap-3">
-            <div className="h-px flex-1 bg-[#1e2a3a]" />
+            <div className="h-px flex-1 bg-[#e2e8f0]" />
             <span className="text-xs text-[#475569]">or</span>
-            <div className="h-px flex-1 bg-[#1e2a3a]" />
+            <div className="h-px flex-1 bg-[#e2e8f0]" />
           </div>
 
           <Button
@@ -156,7 +156,7 @@ export default function AuthPage() {
 
           <p className="mt-4 text-center text-xs text-[#475569]">
             Admin? Use phone number:{" "}
-            <span className="font-mono text-[#60a5fa]">admin</span>
+            <span className="font-mono text-[#1d4ed8]">admin</span>
           </p>
         </Card>
       </div>

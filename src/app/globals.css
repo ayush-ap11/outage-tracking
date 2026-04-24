@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
-/* ── Dark Electric Blue Theme ── */
+/* ── Light Electric Blue Theme ── */
 :root {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #0f0f1a;
-  --bg-card: #13131f;
-  --bg-elevated: #1a1a2e;
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-card: #ffffff;
+  --bg-elevated: #e2e8f0;
   --electric-blue: #2563eb;
   --electric-blue-bright: #3b82f6;
   --electric-glow: #60a5fa;
   --accent-red: #ef4444;
   --accent-yellow: #f59e0b;
   --accent-green: #22c55e;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
-  --border: #1e2a3a;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
   --border-bright: #2563eb40;
 }
 
@@ -54,11 +54,11 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0f;
+  background: #f1f5f9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e2a3a;
+  background: #cbd5e1;
   border-radius: 2px;
 }
 
@@ -68,7 +68,7 @@ body {
 
 ::selection {
   background: rgba(37, 99, 235, 0.3);
-  color: #f1f5f9;
+  color: #0f172a;
 }
 
 *:focus-visible {
@@ -195,7 +195,7 @@ body {
 }
 
 .glass-card {
-  background: rgba(19, 19, 31, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(37, 99, 235, 0.15);
@@ -252,21 +252,21 @@ body {
 }
 
 .glass {
-  background: rgba(19, 19, 31, 0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
   border: 1px solid var(--border-bright);
 }
 
 .leaflet-popup-content-wrapper {
-  background: #13131f !important;
-  border: 1px solid #1e2a3a !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
   border-radius: 12px !important;
-  color: #f1f5f9 !important;
-  box-shadow: 0 0 30px rgba(37, 99, 235, 0.15) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08) !important;
 }
 
 .leaflet-popup-tip {
-  background: #13131f !important;
+  background: #ffffff !important;
 }
 
 .leaflet-popup-content {
@@ -274,11 +274,11 @@ body {
 }
 
 .leaflet-container {
-  background: #0a0a0f !important;
+  background: #f1f5f9 !important;
 }
 
 .leaflet-control-zoom a {
-  background: #13131f !important;
-  color: #f1f5f9 !important;
-  border-color: #1e2a3a !important;
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
 }

@@ -50,10 +50,10 @@ export default function AdminDashboardPage() {
 
   return (
     <ProtectedRoute adminOnly>
-      <div className="flex h-[calc(100vh-64px)] flex-col bg-[#0a0a0f]">
-        <div className="flex items-center justify-between border-b border-[#1e2a3a] bg-[#0f0f1a] px-6 py-3">
+      <div className="flex h-[calc(100vh-64px)] flex-col bg-[#f8fafc]">
+        <div className="flex items-center justify-between border-b border-[#e2e8f0] bg-[#ffffff] px-6 py-3">
           <div>
-            <div className="flex items-center gap-2 font-mono font-bold text-white">
+            <div className="flex items-center gap-2 font-mono font-bold text-[#0f172a]">
               <ShieldCheck className="text-[#3b82f6]" size={16} /> Admin
               Dashboard
             </div>
@@ -62,26 +62,26 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           <div className="hidden items-center md:flex">
-            <div className="border-r border-[#1e2a3a] px-4 text-center">
-              <div className="font-mono text-sm font-bold text-white">
+            <div className="border-r border-[#e2e8f0] px-4 text-center">
+              <div className="font-mono text-sm font-bold text-[#0f172a]">
                 {total}
               </div>
               <div className="text-xs text-[#475569]">Total</div>
             </div>
-            <div className="border-r border-[#1e2a3a] px-4 text-center">
-              <div className="font-mono text-sm font-bold text-red-400">
+            <div className="border-r border-[#e2e8f0] px-4 text-center">
+              <div className="font-mono text-sm font-bold text-red-600">
                 {active}
               </div>
               <div className="text-xs text-[#475569]">Active</div>
             </div>
-            <div className="border-r border-[#1e2a3a] px-4 text-center">
-              <div className="font-mono text-sm font-bold text-green-400">
+            <div className="border-r border-[#e2e8f0] px-4 text-center">
+              <div className="font-mono text-sm font-bold text-green-700">
                 {resolved}
               </div>
               <div className="text-xs text-[#475569]">Resolved</div>
             </div>
             <div className="pl-4 text-center">
-              <div className="font-mono text-sm font-bold text-[#60a5fa]">
+              <div className="font-mono text-sm font-bold text-[#1d4ed8]">
                 {planned}
               </div>
               <div className="text-xs text-[#475569]">Planned</div>
@@ -90,18 +90,18 @@ export default function AdminDashboardPage() {
         </div>
 
         {flashMessage ? (
-          <div className="px-4 pt-3 text-center text-sm text-green-400 md:px-6">
+          <div className="px-4 pt-3 text-center text-sm text-green-700 md:px-6">
             {flashMessage}
           </div>
         ) : null}
 
-        <div className="md:hidden border-b border-[#1e2a3a] bg-[#0f0f1a] px-4 py-2">
+        <div className="md:hidden border-b border-[#e2e8f0] bg-[#ffffff] px-4 py-2">
           <div className="flex gap-2">
             {(["list", "map", "manage"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActivePanel(tab)}
-                className={`cursor-pointer rounded-full px-3 py-1 text-xs font-mono ${activePanel === tab ? "bg-[#2563eb] text-white" : "bg-[#13131f] text-[#94a3b8]"}`}
+                className={`cursor-pointer rounded-full px-3 py-1 text-xs font-mono ${activePanel === tab ? "bg-[#2563eb] text-white" : "bg-[#ffffff] text-[#475569]"}`}
               >
                 {tab === "manage" ? "Manage" : tab === "map" ? "Map" : "List"}
               </button>
@@ -122,7 +122,7 @@ export default function AdminDashboardPage() {
           <div className="animate-fade-in delay-200 opacity-0 flex-1">
             <OutageMap filter="all" />
           </div>
-          <div className="hidden w-96 border-l border-[#1e2a3a] bg-[#0f0f1a] lg:block animate-slide-in-right opacity-0">
+          <div className="hidden w-96 border-l border-[#e2e8f0] bg-[#ffffff] lg:block animate-slide-in-right opacity-0">
             <OutageManagePanel
               outage={selectedOutage}
               onStatusUpdate={handleStatusUpdate}
@@ -155,13 +155,13 @@ export default function AdminDashboardPage() {
           )}
         </div>
 
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#1e2a3a] bg-[#0f0f1a] md:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#e2e8f0] bg-[#ffffff] md:hidden">
           <div className="grid grid-cols-3">
             {(["list", "map", "manage"] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActivePanel(tab)}
-                className={`cursor-pointer py-3 text-xs font-mono ${activePanel === tab ? "bg-[#2563eb] text-white" : "text-[#94a3b8]"}`}
+                className={`cursor-pointer py-3 text-xs font-mono ${activePanel === tab ? "bg-[#2563eb] text-white" : "text-[#475569]"}`}
               >
                 {tab === "manage" ? "Manage" : tab === "map" ? "Map" : "List"}
               </button>

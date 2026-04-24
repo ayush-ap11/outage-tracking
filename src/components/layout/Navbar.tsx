@@ -50,19 +50,19 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 h-16 border-b border-[#1e2a3a] bg-[#0a0a0f]/95 backdrop-blur-md transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-black/50" : ""}`}
+      className={`fixed top-0 left-0 right-0 z-50 h-16 border-b border-[#e2e8f0] bg-[#f8fafc]/95 backdrop-blur-md transition-shadow duration-300 ${scrolled ? "shadow-lg shadow-black/10" : ""}`}
     >
       <div className="mx-auto flex h-full max-w-7xl items-center justify-between px-4">
         <Link href="/" className="flex cursor-pointer items-center gap-2">
           <Zap className="text-[#3b82f6]" size={24} />
           <div>
-            <span className="font-mono text-lg font-bold tracking-wider text-white text-glow">
+            <span className="font-mono text-lg font-bold tracking-wider text-[#0f172a] text-glow">
               Urja System
             </span>
             <div className="-mt-0.5 flex items-center gap-2">
               <p className="text-xs text-[#475569]">Pune Outage Tracker</p>
               {user?.role === "admin" ? (
-                <span className="rounded-full border border-red-500/30 bg-red-500/20 px-2 py-0.5 font-mono text-[10px] text-red-400">
+                <span className="rounded-full border border-red-500/30 bg-red-500/20 px-2 py-0.5 font-mono text-[10px] text-red-600">
                   ADMIN MODE
                 </span>
               ) : null}
@@ -80,16 +80,16 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
                 className={`flex cursor-pointer items-center gap-1 pb-1 text-sm transition-colors duration-200 ${
                   active
                     ? link.href === "/admin/dashboard"
-                      ? "border-b border-red-400 text-red-400"
+                      ? "border-b border-red-600 text-red-600"
                       : "border-b border-[#3b82f6] text-[#3b82f6]"
                     : link.href === "/admin/dashboard"
-                      ? "text-red-400 hover:text-red-300"
-                      : "text-[#94a3b8] hover:text-white"
+                      ? "text-red-600 hover:text-red-700"
+                      : "text-[#475569] hover:text-[#0f172a]"
                 }`}
               >
                 {link.label}
                 {link.chip ? (
-                  <span className="rounded-full border border-red-400/40 bg-red-500/10 px-1.5 py-0.5 text-[9px] font-mono text-red-300">
+                  <span className="rounded-full border border-red-400/40 bg-red-500/10 px-1.5 py-0.5 text-[9px] font-mono text-red-700">
                     {link.chip}
                   </span>
                 ) : null}
@@ -102,7 +102,7 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
           <button
             onClick={onNotificationClick}
             type="button"
-            className="relative cursor-pointer top-4 text-xl text-[#94a3b8] transition-colors hover:text-white"
+            className="relative cursor-pointer top-4 text-xl text-[#475569] transition-colors hover:text-[#0f172a]"
           >
             <Bell size={28} />
             <span className="live-dot absolute -top-11 -right-2 h-2 w-2 rounded-full bg-red-500" />
@@ -111,14 +111,14 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
           <div className="hidden items-center gap-3 md:flex">
             {user ? (
               <>
-                <span className="font-mono text-sm text-[#94a3b8]">
+                <span className="font-mono text-sm text-[#475569]">
                   {truncatedPhone}
                 </span>
                 <span
                   className={`rounded-full border px-2 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider ${
                     user.role === "admin"
-                      ? "border-blue-400/40 bg-blue-600/30 text-blue-300"
-                      : "border-green-400/40 bg-green-600/30 text-green-300"
+                      ? "border-blue-400/40 bg-blue-600/30 text-blue-700"
+                      : "border-green-400/40 bg-green-600/30 text-green-700"
                   }`}
                 >
                   {user.role}
@@ -126,7 +126,7 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
                 <button
                   onClick={logout}
                   type="button"
-                  className="cursor-pointer rounded border border-red-500/30 px-2 py-1 text-xs text-red-400 transition-colors hover:bg-red-500/10"
+                  className="cursor-pointer rounded border border-red-500/30 px-2 py-1 text-xs text-red-600 transition-colors hover:bg-red-500/10"
                 >
                   Logout
                 </button>
@@ -144,7 +144,7 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             type="button"
-            className={`cursor-pointer text-xl text-[#94a3b8] transition-transform duration-300 hover:text-white md:hidden ${mobileOpen ? "rotate-90" : "rotate-0"}`}
+            className={`cursor-pointer text-xl text-[#475569] transition-transform duration-300 hover:text-[#0f172a] md:hidden ${mobileOpen ? "rotate-90" : "rotate-0"}`}
           >
             {mobileOpen ? <X size={18} /> : <Menu size={18} />}
           </button>

@@ -26,7 +26,7 @@ export default function OutageCard({
     <Card onClick={onClick} className="cursor-pointer">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-mono text-sm font-semibold text-white">
+          <h3 className="truncate overflow-hidden text-ellipsis font-mono text-sm font-semibold text-[#0f172a]">
             {outage.area}
           </h3>
           <Badge variant={typeVariant[outage.type] || "default"}>
@@ -35,19 +35,23 @@ export default function OutageCard({
         </div>
         <Badge variant={outage.status}>{outage.status}</Badge>
       </div>
-      <p className="mt-1 text-xs text-[#94a3b8]">{outage.description}</p>
+      <p className="mt-1 line-clamp-2 overflow-hidden text-ellipsis text-xs text-[#334155]">
+        {outage.description}
+      </p>
       {!compact && outage.adminMessage ? (
-        <p className="mt-2 text-xs text-[#60a5fa]">
+        <p className="mt-2 overflow-hidden text-ellipsis text-xs text-[#1d4ed8]">
           <Info className="mr-1 inline-block align-[-2px]" size={12} />{" "}
           {outage.adminMessage}
         </p>
       ) : null}
       <div className="mt-3 flex items-center justify-between gap-3 text-xs text-[#475569]">
-        <span>
+        <span className="overflow-hidden text-ellipsis">
           <Users className="mr-1 inline-block align-[-2px]" size={12} />{" "}
           {confirmations} confirmations
         </span>
-        <span>{formatTimestamp(outage.timestamp)}</span>
+        <span className="overflow-hidden text-ellipsis">
+          {formatTimestamp(outage.timestamp)}
+        </span>
       </div>
     </Card>
   );

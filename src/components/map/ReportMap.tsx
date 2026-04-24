@@ -4,7 +4,6 @@ import { useState } from "react";
 import { MapPin } from "lucide-react";
 import L from "leaflet";
 import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
-import { useAuth } from "@/lib/authContext";
 
 interface ReportMapProps {
   location: { lat: number; lng: number } | null;
@@ -37,19 +36,14 @@ export default function ReportMap({
   onLocationChange,
 }: ReportMapProps) {
   const [icon] = useState(createIcon);
-  const { theme } = useAuth();
   const center: [number, number] = location
     ? [location.lat, location.lng]
     : [18.5204, 73.8567];
-  const tileUrl =
-    theme === "light"
-      ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-      : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
 
   return (
     <div className="relative h-full w-full">
       {!location ? (
-        <div className="pointer-events-none absolute left-4 top-4 z-1000 rounded-full border border-[#1e2a3a] bg-[#0f0f1a]/95 px-3 py-2 text-xs text-[#94a3b8] shadow-lg backdrop-blur">
+        <div className="pointer-events-none absolute left-4 top-4 z-1000 rounded-full border border-[#e2e8f0] bg-[#ffffff]/95 px-3 py-2 text-xs text-[#475569] shadow-lg backdrop-blur">
           <MapPin className="mr-1 inline-block align-[-2px]" size={12} /> Tap
           map to place pin or use GPS button
         </div>
@@ -60,7 +54,7 @@ export default function ReportMap({
         style={{ height: "100%", width: "100%" }}
       >
         <TileLayer
-          url={tileUrl}
+          url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
           attribution="&copy; OpenStreetMap &copy; CartoDB"
         />
         <LocationPicker onLocationChange={onLocationChange} />

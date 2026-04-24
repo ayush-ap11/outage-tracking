@@ -25,18 +25,18 @@ export default function StatusTimeline({ currentStatus }: StatusTimelineProps) {
                     ? "bg-[#2563eb]"
                     : next
                       ? "bg-[#f59e0b] ring-2 ring-[#f59e0b]/30"
-                      : "border border-[#475569] bg-[#1e2a3a]"
+                      : "border border-[#334155] bg-[#e2e8f0]"
                 }`}
               />
               <span
-                className={`mt-1 w-16 text-center text-[10px] font-mono ${active ? "text-[#60a5fa]" : "text-[#475569]"}`}
+                className={`mt-1 w-16 overflow-hidden text-center text-[10px] font-mono ${active ? "text-[#1d4ed8]" : "text-[#334155]"}`}
               >
                 {labels[index]}
               </span>
             </div>
             {index < STEPS.length - 1 ? (
               <div
-                className={`mx-1 h-px flex-1 ${index < currentIndex ? "bg-[#2563eb]" : "bg-[#1e2a3a]"}`}
+                className={`mx-1 h-px flex-1 ${index < currentIndex ? "bg-[#2563eb]" : "bg-[#e2e8f0]"}`}
               />
             ) : null}
           </div>

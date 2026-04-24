@@ -24,8 +24,8 @@ export default function AreaStatsTable({ stats }: AreaStatsTableProps) {
           className="animate-slide-in-right px-4 py-3 opacity-0"
           style={{ animationDelay: `${Math.min(index * 80, 400)}ms` }}
         >
-          <div className="flex items-center gap-3 text-sm transition-colors duration-150 hover:bg-[#1a1a2e]">
-            <div className="flex-1 font-mono text-sm font-semibold text-white">
+          <div className="flex items-center gap-3 text-sm transition-colors duration-150 hover:bg-[#e2e8f0]">
+            <div className="flex-1 overflow-hidden font-mono text-sm font-semibold text-[#0f172a]">
               {stat.area}{" "}
               {stat.area === mostAffectedArea ? (
                 <Badge variant="unplanned" className="ml-2">
@@ -34,11 +34,19 @@ export default function AreaStatsTable({ stats }: AreaStatsTableProps) {
                 </Badge>
               ) : null}
             </div>
-            <div className="w-14 font-mono text-white">{stat.total}</div>
-            <div className="w-20 font-mono text-red-400">{stat.unplanned}</div>
-            <div className="w-16 font-mono text-[#60a5fa]">{stat.planned}</div>
-            <div className="w-16 font-mono text-green-400">{stat.resolved}</div>
-            <div className="w-24 font-mono text-[#94a3b8]">
+            <div className="w-14 overflow-hidden font-mono text-[#0f172a]">
+              {stat.total}
+            </div>
+            <div className="w-20 overflow-hidden font-mono text-red-600">
+              {stat.unplanned}
+            </div>
+            <div className="w-16 overflow-hidden font-mono text-[#1d4ed8]">
+              {stat.planned}
+            </div>
+            <div className="w-16 overflow-hidden font-mono text-green-700">
+              {stat.resolved}
+            </div>
+            <div className="w-24 overflow-hidden font-mono text-[#334155]">
               {stat.avgConfirms}
             </div>
           </div>

@@ -49,23 +49,23 @@ export default function NotificationPanel({
 }: NotificationPanelProps) {
   return (
     <div
-      className={`fixed top-16 right-0 h-[calc(100vh-64px)] w-80 border-l border-[#1e2a3a] bg-[#0f0f1a] z-40 transition-transform duration-300 ease-in-out ${
+      className={`fixed top-16 right-0 h-[calc(100vh-64px)] w-80 border-l border-[#e2e8f0] bg-[#ffffff] z-40 transition-transform duration-300 ease-in-out ${
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="flex items-center justify-between border-b border-[#1e2a3a] px-4 py-3">
-        <h3 className="text-sm font-semibold text-white">Notifications</h3>
+      <div className="flex items-center justify-between border-b border-[#e2e8f0] px-4 py-3">
+        <h3 className="text-sm font-semibold text-[#0f172a]">Notifications</h3>
         <div className="flex items-center gap-3">
           <button
             type="button"
-            className="cursor-pointer text-[10px] text-[#3b82f6] transition-colors hover:text-blue-300"
+            className="cursor-pointer text-[10px] text-[#3b82f6] transition-colors hover:text-blue-700"
           >
             Mark all read
           </button>
           <button
             onClick={onClose}
             type="button"
-            className="cursor-pointer text-lg leading-none text-[#94a3b8] transition-colors hover:text-white"
+            className="cursor-pointer text-lg leading-none text-[#475569] transition-colors hover:text-[#0f172a]"
           >
             <X size={18} />
           </button>
@@ -76,8 +76,8 @@ export default function NotificationPanel({
         {NOTIFICATIONS.map((notification) => (
           <div
             key={notification.id}
-            className={`cursor-pointer border-b border-[#1e2a3a]/50 px-4 py-3 transition-colors hover:bg-[#1a1a2e] ${
-              notification.unread ? "bg-[#1a1a2e]/60" : ""
+            className={`cursor-pointer border-b border-[#e2e8f0]/50 px-4 py-3 transition-colors hover:bg-[#e2e8f0] ${
+              notification.unread ? "bg-[#e2e8f0]/60" : ""
             }`}
           >
             <div className="flex gap-3">
@@ -86,13 +86,13 @@ export default function NotificationPanel({
               ) : notification.icon === "CheckCircle" ? (
                 <CheckCircle className="mt-0.5 text-[#22c55e]" size={18} />
               ) : (
-                <Info className="mt-0.5 text-[#60a5fa]" size={18} />
+                <Info className="mt-0.5 text-[#1d4ed8]" size={18} />
               )}
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium leading-tight text-white">
+                <p className="text-sm font-medium leading-tight text-[#0f172a]">
                   {notification.title}
                 </p>
-                <p className="mt-0.5 text-xs text-[#64748b]">
+                <p className="mt-0.5 text-xs text-[#475569]">
                   {notification.sub}
                 </p>
                 <p className="mt-1 text-[10px] text-[#475569]">
@@ -107,7 +107,7 @@ export default function NotificationPanel({
         ))}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 border-t border-[#1e2a3a] px-4 py-3">
+      <div className="absolute bottom-0 left-0 right-0 border-t border-[#e2e8f0] px-4 py-3">
         <p className="text-center text-[10px] italic text-[#475569]">
           Push notifications coming in v2
         </p>

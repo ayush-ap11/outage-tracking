@@ -2,10 +2,10 @@ import type { OutageStatus, OutageType } from "./mockData";
 
 export function getStatusColor(status: OutageStatus | string): string {
   const map: Record<string, string> = {
-    reported: "bg-red-500/15 text-red-400 border-red-500/30",
-    acknowledged: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
-    in_progress: "bg-blue-500/15 text-blue-400 border-blue-500/30",
-    resolved: "bg-green-500/15 text-green-400 border-green-500/30",
+    reported: "bg-red-500/15 text-red-600 border-red-500/30",
+    acknowledged: "bg-yellow-500/15 text-yellow-600 border-yellow-500/30",
+    in_progress: "bg-blue-500/15 text-blue-700 border-blue-500/30",
+    resolved: "bg-green-500/15 text-green-700 border-green-500/30",
   };
   return map[status] || "bg-gray-500/15 text-gray-400 border-gray-500/30";
 }
@@ -22,8 +22,8 @@ export function getStatusLabel(status: OutageStatus | string): string {
 
 export function getTypeColor(type: OutageType | string): string {
   const map: Record<string, string> = {
-    planned: "bg-blue-500/15 text-blue-400 border-blue-500/30",
-    unplanned: "bg-red-500/15 text-red-400 border-red-500/30",
+    planned: "bg-blue-500/15 text-blue-700 border-blue-500/30",
+    unplanned: "bg-red-500/15 text-red-600 border-red-500/30",
   };
   return map[type] || "bg-gray-500/15 text-gray-400 border-gray-500/30";
 }

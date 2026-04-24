@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-[#0a0a0f] text-[var(--text-primary)] antialiased">
+      <body className="min-h-screen bg-[#f8fafc] text-text-primary antialiased">
         <AuthProvider>
           <NavbarWrapper />
           <main className="pt-16">{children}</main>

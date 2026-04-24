@@ -36,16 +36,16 @@ export default function ProfilePage() {
 
   return (
     <ProtectedRoute>
-      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#0a0a0f] p-4 lg:p-6">
+      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#f8fafc] p-4 lg:p-6">
         <div className="mx-auto max-w-7xl">
           <button
             onClick={() => router.back()}
             type="button"
-            className="cursor-pointer text-2xl text-[#94a3b8] transition hover:text-white"
+            className="cursor-pointer text-2xl text-[#475569] transition hover:text-[#0f172a]"
           >
             <ArrowLeft size={24} />
           </button>
-          <h1 className="mt-2 font-mono text-2xl font-bold text-white">
+          <h1 className="mt-2 font-mono text-2xl font-bold text-[#0f172a]">
             My Profile
           </h1>
           <p className="mt-1 text-sm text-[#475569]">
@@ -58,10 +58,10 @@ export default function ProfilePage() {
                 glowing
                 className="animate-fade-in-scale text-center opacity-0"
               >
-                <div className="animate-pulse-glow mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#2563eb] bg-[#1a1a2e] text-3xl text-[#60a5fa]">
+                <div className="animate-pulse-glow mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-[#2563eb] bg-[#e2e8f0] text-3xl text-[#1d4ed8]">
                   <User size={40} />
                 </div>
-                <div className="mt-3 font-mono text-lg font-bold text-white">
+                <div className="mt-3 font-mono text-lg font-bold text-[#0f172a]">
                   {user?.phone}
                 </div>
                 <div className="mt-1 flex justify-center">
@@ -92,7 +92,7 @@ export default function ProfilePage() {
                         value={consumerIdInput}
                         onChange={(e) => setConsumerIdInput(e.target.value)}
                         placeholder="Enter your MSEDCL Consumer ID"
-                        className="w-full rounded-lg border border-[#1e2a3a] bg-[#0f0f1a] px-4 py-3 font-mono text-sm text-white placeholder-[#475569] focus:border-[#2563eb] focus:outline-none"
+                        className="w-full rounded-lg border border-[#e2e8f0] bg-[#ffffff] px-4 py-3 font-mono text-sm text-[#0f172a] placeholder-[#94a3b8] focus:border-[#2563eb] focus:outline-none"
                       />
                       <div className="flex gap-2">
                         <Button
@@ -114,7 +114,7 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   ) : consumerId ? (
-                    <div className="font-mono text-sm text-[#60a5fa]">
+                    <div className="font-mono text-sm text-[#1d4ed8]">
                       {consumerId}
                     </div>
                   ) : (
@@ -152,10 +152,10 @@ export default function ProfilePage() {
                 ].map(([label, value], index) => (
                   <div
                     key={String(label)}
-                    className={`flex items-center justify-between py-2 ${index < 3 ? "border-b border-[#1e2a3a]" : ""}`}
+                    className={`flex items-center justify-between py-2 ${index < 3 ? "border-b border-[#e2e8f0]" : ""}`}
                   >
                     <span className="text-sm text-[#475569]">{label}</span>
-                    <span className="font-mono text-sm font-bold text-white">
+                    <span className="font-mono text-sm font-bold text-[#0f172a]">
                       {value as any}
                     </span>
                   </div>
@@ -179,7 +179,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex-1">
-              <div className="font-mono text-base font-semibold text-white">
+              <div className="font-mono text-base font-semibold text-[#0f172a]">
                 My Reports ({myReports.length})
               </div>
               <div className="mt-2 mb-4 flex gap-2">
@@ -187,7 +187,7 @@ export default function ProfilePage() {
                   <button
                     key={item}
                     onClick={() => setReportFilter(item)}
-                    className={`rounded-lg px-4 py-2 font-mono text-sm transition ${reportFilter === item ? "bg-[#2563eb] text-white" : "border border-[#1e2a3a] bg-[#13131f] text-[#94a3b8]"}`}
+                    className={`rounded-lg px-4 py-2 font-mono text-sm transition ${reportFilter === item ? "bg-[#2563eb] text-white" : "border border-[#e2e8f0] bg-[#ffffff] text-[#475569]"}`}
                   >
                     {item === "all"
                       ? "All"
@@ -204,7 +204,7 @@ export default function ProfilePage() {
                     className="animate-pulse-slow mb-2 text-[#3b82f6]"
                     size={40}
                   />
-                  <div className="font-mono text-white">No reports yet</div>
+                  <div className="font-mono text-[#0f172a]">No reports yet</div>
                   <div className="mt-1 text-sm text-[#475569]">
                     Be the first to report an outage in your area
                   </div>
@@ -226,7 +226,7 @@ export default function ProfilePage() {
                       <div className="absolute right-3 top-3 z-10">
                         <Badge
                           variant="admin"
-                          className="bg-[#2563eb]/20 text-[10px] text-[#60a5fa]"
+                          className="bg-[#2563eb]/20 text-[10px] text-[#1d4ed8]"
                         >
                           Your Report
                         </Badge>

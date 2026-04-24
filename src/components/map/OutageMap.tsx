@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { useAuth } from "@/lib/authContext";
 import { mockOutages } from "@/lib/mockData";
 import OutagePin from "./OutagePin";
 import useOutages from "@/hooks/useOutages";
@@ -36,8 +35,6 @@ export default function OutageMap({ filter }: OutageMapProps) {
   const filteredOutages = source.filter(
     (outage) => filter === "all" || outage.type === filter,
   );
-  const { theme } = useAuth();
-
   return (
     <MapContainer
       center={[18.5204, 73.8567]}
@@ -49,11 +46,7 @@ export default function OutageMap({ filter }: OutageMapProps) {
       <FitCenter />
       <TileLayer
         attribution="&copy; OpenStreetMap &copy; CartoDB"
-        url={
-          theme === "light"
-            ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-            : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-        }
+        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
       {filteredOutages.map((outage) => (
         <OutagePin

@@ -26,7 +26,7 @@ type StatusFilter =
 type SortOrder = "newest" | "oldest";
 
 const selectClass =
-  "appearance-none rounded-lg border border-[#1e2a3a] bg-[#13131f] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke-width=%222%22 stroke=%22%2394a3b8%22%3E%3Cpath stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22m19 9-7 7-7-7%22/%3E%3C/svg%3E')] bg-[length:14px_14px] bg-[right_0.75rem_center] bg-no-repeat px-3 py-2 pr-10 font-mono text-sm text-[#94a3b8] outline-none focus:border-[#2563eb]";
+  "appearance-none rounded-lg border border-[#e2e8f0] bg-[#ffffff] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke-width=%222%22 stroke=%22%2394a3b8%22%3E%3Cpath stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22m19 9-7 7-7-7%22/%3E%3C/svg%3E')] bg-[length:14px_14px] bg-[right_0.75rem_center] bg-no-repeat px-3 py-2 pr-10 font-mono text-sm text-[#334155] outline-none focus:border-[#2563eb]";
 
 export default function HistoryPage() {
   const [activeTab, setActiveTab] = useState<Tab>("history");
@@ -71,9 +71,9 @@ export default function HistoryPage() {
 
   return (
     <ProtectedRoute>
-      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#0a0a0f] p-4 lg:p-6">
+      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#f8fafc] p-4 lg:p-6">
         <div className="mx-auto max-w-7xl">
-          <h1 className="font-mono text-2xl font-bold text-white">
+          <h1 className="font-mono text-2xl font-bold text-[#0f172a]">
             Outage History
           </h1>
           <p className="mt-1 text-sm text-[#475569]">
@@ -84,7 +84,7 @@ export default function HistoryPage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`cursor-pointer rounded-lg px-5 py-2 font-mono text-sm transition ${activeTab === tab ? "bg-[#2563eb] text-white" : "border border-[#1e2a3a] bg-[#13131f] text-[#94a3b8]"}`}
+                className={`cursor-pointer rounded-lg px-5 py-2 font-mono text-sm transition ${activeTab === tab ? "bg-[#2563eb] text-white" : "border border-[#e2e8f0] bg-[#ffffff] text-[#475569]"}`}
               >
                 {tab === "history" ? "History Log" : "Area Stats"}
               </button>
@@ -145,7 +145,7 @@ export default function HistoryPage() {
                       }
                     >
                       <Icon className="mb-1 text-[#3b82f6]" size={20} />
-                      <div className="font-mono text-xl font-bold text-white">
+                      <div className="font-mono text-xl font-bold text-[#0f172a]">
                         {value as any}
                       </div>
                       <div className="mt-0.5 text-xs text-[#475569]">
@@ -177,7 +177,7 @@ export default function HistoryPage() {
                         className="animate-pulse-slow mx-auto text-[#3b82f6]"
                         size={40}
                       />
-                      <p className="mt-2 font-mono text-white">
+                      <p className="mt-2 font-mono text-[#0f172a]">
                         No outages found
                       </p>
                       <p className="mt-1 text-sm text-[#475569]">
@@ -190,8 +190,8 @@ export default function HistoryPage() {
             ) : (
               <div className="space-y-3 overflow-x-auto">
                 <div className="min-w-190">
-                  <div className="mb-2 rounded-lg bg-[#0f0f1a] px-4 py-2">
-                    <div className="flex items-center gap-6 text-xs font-mono uppercase tracking-widest text-[#475569]">
+                  <div className="mb-2 rounded-lg bg-[#ffffff] px-4 py-2">
+                    <div className="flex items-center gap-6 text-xs font-mono uppercase tracking-widest text-[#94a3b8]">
                       <span className="flex-1">Area</span>
                       <span className="w-14">Total</span>
                       <span className="w-20">Unplanned</span>
@@ -202,11 +202,11 @@ export default function HistoryPage() {
                   </div>
                   <AreaStatsTable stats={stats} />
                 </div>
-                <div className="rounded-xl border border-[#1e2a3a] bg-[#13131f] p-4 text-center text-xs text-[#475569]">
+                <div className="rounded-xl border border-[#e2e8f0] bg-[#ffffff] p-4 text-center text-xs text-[#94a3b8]">
                   <div className="inline-flex items-center gap-2">
                     <BarChart3 size={12} /> Showing data for last 30 days
                   </div>
-                  <div className="mt-1 text-[#475569]/50">
+                  <div className="mt-1 text-[#94a3b8]/50">
                     Export feature coming in v2
                   </div>
                 </div>

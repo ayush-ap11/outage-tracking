@@ -29,13 +29,13 @@ export default function MapPage() {
 
   return (
     <ProtectedRoute>
-      <div className="animate-fade-in h-[calc(100vh-64px)] bg-[#0a0a0f]">
+      <div className="animate-fade-in h-[calc(100vh-64px)] bg-[#f8fafc]">
         <div className="flex h-full flex-col lg:flex-row">
           <div className="flex min-w-0 flex-1 flex-col p-4">
             <div className="mb-4 flex items-end justify-between gap-4">
               <div>
                 <div className="flex items-center gap-3">
-                  <h1 className="font-mono text-lg font-bold text-white">
+                  <h1 className="font-mono text-lg font-bold text-[#0f172a]">
                     Live Outage Map
                   </h1>
                   <span className="flex items-center gap-2 font-mono text-xs text-[#ef4444]">
@@ -45,12 +45,12 @@ export default function MapPage() {
                 </div>
                 <p className="text-sm text-[#475569]">Pune, Maharashtra</p>
               </div>
-              <div className="flex gap-2 rounded-xl border border-[#1e2a3a] bg-[#0f0f1a] p-1">
+              <div className="flex gap-2 rounded-xl border border-[#e2e8f0] bg-[#ffffff] p-1">
                 {(["all", "planned", "unplanned"] as Filter[]).map((item) => (
                   <button
                     key={item}
                     onClick={() => setFilter(item)}
-                    className={`cursor-pointer rounded-lg px-4 py-1.5 text-sm font-mono transition-all duration-200 ${filter === item ? "bg-[#2563eb] text-white" : "bg-[#13131f] text-[#94a3b8] hover:text-white"}`}
+                    className={`cursor-pointer rounded-lg px-4 py-1.5 text-sm font-mono transition-all duration-200 ${filter === item ? "bg-[#2563eb] text-white" : "bg-[#ffffff] text-[#475569] hover:text-[#0f172a]"}`}
                   >
                     {item === "all"
                       ? "All"
@@ -62,7 +62,7 @@ export default function MapPage() {
               </div>
             </div>
 
-            <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl border border-[#1e2a3a] bg-[#0f0f1a]">
+            <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl border border-[#e2e8f0] bg-[#ffffff]">
               <OutageMap filter={filter} />
               <Button
                 size="lg"
@@ -75,7 +75,7 @@ export default function MapPage() {
 
             <div className="mt-4 lg:hidden">
               <div className="mb-2 flex items-center justify-between">
-                <h2 className="font-mono text-sm text-[#94a3b8] transition-all duration-300">
+                <h2 className="font-mono text-sm text-[#475569] transition-all duration-300">
                   Active Outages ({filteredOutages.length})
                 </h2>
               </div>
@@ -91,7 +91,7 @@ export default function MapPage() {
                     </div>
                   ))
                 ) : (
-                  <div className="rounded-xl border border-[#1e2a3a] bg-[#13131f] p-4 text-sm text-[#475569]">
+                  <div className="rounded-xl border border-[#e2e8f0] bg-[#ffffff] p-4 text-sm text-[#475569]">
                     No active outages
                   </div>
                 )}
@@ -99,8 +99,8 @@ export default function MapPage() {
             </div>
           </div>
 
-          <aside className="hidden w-80 shrink-0 border-l border-[#1e2a3a] bg-[#0f0f1a] p-4 lg:block">
-            <h2 className="font-mono text-sm text-[#94a3b8] transition-all duration-300">
+          <aside className="hidden w-80 shrink-0 border-l border-[#e2e8f0] bg-[#ffffff] p-4 lg:block">
+            <h2 className="font-mono text-sm text-[#334155] transition-all duration-300">
               Active Outages ({filteredOutages.length})
             </h2>
             <div

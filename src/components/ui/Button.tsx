@@ -5,8 +5,8 @@ const VARIANTS = {
   primary:
     "bg-[#2563eb] hover:bg-[#3b82f6] text-white hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]",
   outline: "border border-[#2563eb] text-[#3b82f6] hover:bg-[#2563eb]/10",
-  danger: "border border-red-500 text-red-400 hover:bg-red-500/10",
-  ghost: "text-[#94a3b8] hover:text-white hover:bg-white/5",
+  danger: "border border-red-500 text-red-600 hover:bg-red-500/10",
+  ghost: "text-[#475569] hover:text-[#0f172a] hover:bg-black/5",
   success: "bg-green-600 hover:bg-green-500 text-white",
 } as const;
 

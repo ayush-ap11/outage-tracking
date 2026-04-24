@@ -17,10 +17,10 @@ export default function Card({
   ...rest
 }: CardProps) {
   const base =
-    "bg-[#13131f] border border-[#1e2a3a] rounded-xl transition-all duration-200";
+    "bg-[#ffffff] border border-[#e2e8f0] rounded-xl transition-all duration-200 overflow-hidden";
 
   const interactive = onClick
-    ? "cursor-pointer hover:border-[#2563eb]/40 hover:bg-[#1a1a2e]"
+    ? "cursor-pointer hover:border-[#2563eb]/40 hover:bg-[#e2e8f0]"
     : "";
 
   const glowClass =
