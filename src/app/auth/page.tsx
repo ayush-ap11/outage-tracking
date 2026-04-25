@@ -69,7 +69,7 @@ export default function AuthPage() {
         <div className="mb-6 text-center">
           <Zap className="mx-auto text-[#3b82f6]" size={40} />
           <h1 className="mt-2 font-mono text-2xl font-bold text-[#0f172a]">
-            Urja System
+            Light Buddy
           </h1>
           <p className="text-sm text-[#475569]">Pune Power Outage Tracker</p>
           <div className="mt-6 mb-6 h-px bg-linear-to-r from-transparent via-[#2563eb]/40 to-transparent" />

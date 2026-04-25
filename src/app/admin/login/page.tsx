@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
               Admin Portal
             </h1>
             <p className="text-sm text-[#475569]">
-              Urja System — Utility Dashboard
+              Light Buddy — Utility Dashboard
             </p>
             <p className="mt-1 text-xs text-red-700/70">
               Authorized personnel only

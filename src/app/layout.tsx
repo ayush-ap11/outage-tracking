@@ -4,7 +4,7 @@ import { AuthProvider } from "@/lib/authContext";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
 
 export const metadata = {
-  title: "Urja System — Pune Outage Tracker",
+  title: "Light Buddy — Pune Outage Tracker",
   description:
     "Real-time power outage tracking and reporting for Pune citizens",
 };

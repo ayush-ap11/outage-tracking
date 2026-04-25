@@ -1,4 +1,4 @@
-# ⚡ Urja System — Pune Power Outage Tracker
+# ⚡ Light Buddy — Pune Power Outage Tracker
 
 Real-time power outage tracking for Pune, Maharashtra. Built to fill the gap where no live citizen-reporting platform exists for MSEDCL consumers.
 
@@ -56,7 +56,7 @@ Connect the repo to Vercel, add the environment variables in the Vercel dashboar
 - Real OTP via Firebase Phone Auth
 - Push notifications via FCM
 - Marathi language toggle
-- MSEDCL / Urja System API integration
+- MSEDCL / Light Buddy API integration
 - CSV export for admin
 - GeoJSON area boundaries
 

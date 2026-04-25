@@ -57,7 +57,7 @@ export default function Navbar({ onNotificationClick }: NavbarProps) {
           <Zap className="text-[#3b82f6]" size={24} />
           <div>
             <span className="font-mono text-lg font-bold tracking-wider text-[#0f172a] text-glow">
-              Urja System
+              Light Buddy
             </span>
             <div className="-mt-0.5 flex items-center gap-2">
               <p className="text-xs text-[#475569]">Pune Outage Tracker</p>

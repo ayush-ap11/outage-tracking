@@ -58,7 +58,7 @@ export default function AdminDashboardPage() {
               Dashboard
             </div>
             <div className="text-xs text-[#475569]">
-              Urja System — Pune Control Center
+              Light Buddy — Pune Control Center
             </div>
           </div>
           <div className="hidden items-center md:flex">
