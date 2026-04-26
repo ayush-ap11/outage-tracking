@@ -22,8 +22,8 @@ export function useHtLines() {
     setHtError(false);
     try {
       const query = `
-        [out:json][timeout:25];
-        way["power"="line"](18.45,73.70,18.70,73.90);
+        [out:json][timeout:35];
+        way["power"="line"](18.20,73.55,18.95,74.10);
         out geom;
       `;
       const response = await fetch(OVERPASS_URL, {
