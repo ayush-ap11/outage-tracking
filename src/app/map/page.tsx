@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Zap } from "lucide-react";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
@@ -15,17 +15,10 @@ const OutageMap = dynamic(() => import("@/components/map/OutageMap"), {
   loading: () => <LoadingScreen message="Loading map..." />,
 });
 
-type Filter = "all" | "planned" | "unplanned";
-
 export default function MapPage() {
   const router = useRouter();
   const { outages } = useOutages();
-  const [filter, setFilter] = useState<Filter>("all");
-  const filteredOutages = useMemo(
-    () =>
-      outages.filter((outage) => filter === "all" || outage.type === filter),
-    [outages, filter],
-  );
+  const visibleOutages = useMemo(() => outages, [outages]);
 
   return (
     <ProtectedRoute>
@@ -45,25 +38,10 @@ export default function MapPage() {
                 </div>
                 <p className="text-sm text-[#475569]">Pune, Maharashtra</p>
               </div>
-              <div className="flex gap-2 rounded-xl border border-[#e2e8f0] bg-[#ffffff] p-1">
-                {(["all", "planned", "unplanned"] as Filter[]).map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => setFilter(item)}
-                    className={`cursor-pointer rounded-lg px-4 py-1.5 text-sm font-mono transition-all duration-200 ${filter === item ? "bg-[#2563eb] text-white" : "bg-[#ffffff] text-[#475569] hover:text-[#0f172a]"}`}
-                  >
-                    {item === "all"
-                      ? "All"
-                      : item === "planned"
-                        ? "Planned"
-                        : "Unplanned"}
-                  </button>
-                ))}
-              </div>
             </div>
 
             <div className="relative min-h-0 flex-1 overflow-hidden rounded-xl border border-[#e2e8f0] bg-[#ffffff]">
-              <OutageMap filter={filter} />
+              <OutageMap />
               <Button
                 size="lg"
                 className="animate-pulse-glow absolute bottom-6 right-6 z-1000"
@@ -76,12 +54,12 @@ export default function MapPage() {
             <div className="mt-4 lg:hidden">
               <div className="mb-2 flex items-center justify-between">
                 <h2 className="font-mono text-sm text-[#475569] transition-all duration-300">
-                  Active Outages ({filteredOutages.length})
+                  Active Outages ({visibleOutages.length})
                 </h2>
               </div>
               <div className="flex gap-3 overflow-x-auto pb-2">
-                {filteredOutages.length ? (
-                  filteredOutages.map((outage, index) => (
+                {visibleOutages.length ? (
+                  visibleOutages.map((outage, index) => (
                     <div
                       key={outage.id}
                       className="min-w-64 shrink-0 animate-fade-in opacity-0"
@@ -101,14 +79,14 @@ export default function MapPage() {
 
           <aside className="hidden w-80 shrink-0 border-l border-[#e2e8f0] bg-[#ffffff] p-4 lg:block">
             <h2 className="font-mono text-sm text-[#334155] transition-all duration-300">
-              Active Outages ({filteredOutages.length})
+              Active Outages ({visibleOutages.length})
             </h2>
             <div
               className="mt-4 space-y-3 overflow-y-auto pr-1"
               style={{ height: "calc(100% - 2rem)" }}
             >
-              {filteredOutages.length ? (
-                filteredOutages.map((outage, index) => (
+              {visibleOutages.length ? (
+                visibleOutages.map((outage, index) => (
                   <div
                     key={outage.id}
                     className="animate-fade-in opacity-0"

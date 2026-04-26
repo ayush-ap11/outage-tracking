@@ -1,4 +1,32 @@
-import type { OutageStatus, OutageType } from "./mockData";
+import {
+  CATEGORY_CONFIG,
+  COMPLAINT_TYPES,
+  DP_NUMBERS,
+  SEVERITY_CONFIG,
+  SUBSTATIONS,
+} from "./constants";
+
+export type ComplaintCategory =
+  | "supply"
+  | "infrastructure"
+  | "safety"
+  | "scheduled";
+
+export type Severity = "minor" | "moderate" | "critical" | "emergency";
+
+export type OutageStatus =
+  | "reported"
+  | "acknowledged"
+  | "in_progress"
+  | "resolved";
+
+export {
+  CATEGORY_CONFIG,
+  COMPLAINT_TYPES,
+  DP_NUMBERS,
+  SEVERITY_CONFIG,
+  SUBSTATIONS,
+};
 
 export function getStatusColor(status: OutageStatus | string): string {
   const map: Record<string, string> = {
@@ -20,16 +48,43 @@ export function getStatusLabel(status: OutageStatus | string): string {
   return map[status] || status;
 }
 
-export function getTypeColor(type: OutageType | string): string {
-  const map: Record<string, string> = {
-    planned: "bg-blue-500/15 text-blue-700 border-blue-500/30",
-    unplanned: "bg-red-500/15 text-red-600 border-red-500/30",
-  };
-  return map[type] || "bg-gray-500/15 text-gray-400 border-gray-500/30";
+const TYPE_STYLES = [
+  "bg-sky-500/15 text-sky-700 border-sky-500/30",
+  "bg-violet-500/15 text-violet-700 border-violet-500/30",
+  "bg-amber-500/15 text-amber-700 border-amber-500/30",
+  "bg-rose-500/15 text-rose-700 border-rose-500/30",
+];
+
+const getTypeStyleIndex = (value: string): number => {
+  let hash = 0;
+  for (const character of value) {
+    hash = (hash * 31 + character.charCodeAt(0)) | 0;
+  }
+  return Math.abs(hash) % TYPE_STYLES.length;
+};
+
+export function getTypeColor(type: string): string {
+  if (!type) return "bg-gray-500/15 text-gray-400 border-gray-500/30";
+  return TYPE_STYLES[getTypeStyleIndex(type)];
 }
 
-export function getTypeLabel(type: OutageType | string): string {
-  return type === "planned" ? "Planned" : "Unplanned";
+export function getTypeLabel(type: string): string {
+  if (!type) return "";
+  return type
+    .split(/[_-]/)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+export function getSeverityFromType(complaintTypeId: string): Severity {
+  for (const category of Object.values(COMPLAINT_TYPES)) {
+    for (const complaintType of category) {
+      if (complaintType.id === complaintTypeId) {
+        return complaintType.severity as Severity;
+      }
+    }
+  }
+  return "moderate";
 }
 
 export function formatTimestamp(isoString: string | null | undefined): string {

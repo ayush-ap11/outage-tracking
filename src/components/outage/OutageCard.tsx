@@ -21,6 +21,9 @@ export default function OutageCard({
   compact,
 }: OutageCardProps) {
   const confirmations = getConfirmationCount(outage.confirmations);
+  const displayType =
+    outage.type ??
+    (outage.complaintCategory === "scheduled" ? "planned" : "unplanned");
 
   return (
     <Card onClick={onClick} className="cursor-pointer">
@@ -29,8 +32,8 @@ export default function OutageCard({
           <h3 className="truncate overflow-hidden text-ellipsis font-mono text-sm font-semibold text-[#0f172a]">
             {outage.area}
           </h3>
-          <Badge variant={typeVariant[outage.type] || "default"}>
-            {outage.type}
+          <Badge variant={typeVariant[displayType] || "default"}>
+            {displayType}
           </Badge>
         </div>
         <Badge variant={outage.status}>{outage.status}</Badge>

@@ -1,7 +1,15 @@
 import type { ReactNode } from "react";
+import { Roboto } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/authContext";
 import NavbarWrapper from "@/components/layout/NavbarWrapper";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
+  display: "swap",
+});
 
 export const metadata = {
   title: "Light Buddy — Pune Outage Tracker",
@@ -19,12 +27,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body className="min-h-screen bg-[#f8fafc] text-text-primary antialiased">
+      <body className={`${roboto.variable} font-sans antialiased`}>
         <AuthProvider>
           <NavbarWrapper />
           <main className="pt-16">{children}</main>

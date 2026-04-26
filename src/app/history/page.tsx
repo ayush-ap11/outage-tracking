@@ -28,6 +28,10 @@ type SortOrder = "newest" | "oldest";
 const selectClass =
   "appearance-none rounded-lg border border-[#e2e8f0] bg-[#ffffff] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 24 24%22 stroke-width=%222%22 stroke=%22%2394a3b8%22%3E%3Cpath stroke-linecap=%22round%22 stroke-linejoin=%22round%22 d=%22m19 9-7 7-7-7%22/%3E%3C/svg%3E')] bg-[length:14px_14px] bg-[right_0.75rem_center] bg-no-repeat px-3 py-2 pr-10 font-mono text-sm text-[#334155] outline-none focus:border-[#2563eb]";
 
+const getDisplayType = (outage: { type?: string; complaintCategory: string }) =>
+  outage.type ??
+  (outage.complaintCategory === "scheduled" ? "planned" : "unplanned");
+
 export default function HistoryPage() {
   const [activeTab, setActiveTab] = useState<Tab>("history");
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
@@ -39,7 +43,7 @@ export default function HistoryPage() {
       outages
         .filter(
           (outage) =>
-            (typeFilter === "all" || outage.type === typeFilter) &&
+            (typeFilter === "all" || getDisplayType(outage) === typeFilter) &&
             (statusFilter === "all" || outage.status === statusFilter),
         )
         .sort((a, b) =>

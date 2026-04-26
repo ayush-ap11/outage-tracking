@@ -2,44 +2,73 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { ShieldCheck } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Phone,
+  ShieldCheck,
+} from "lucide-react";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import OutageManagePanel from "@/components/admin/OutageManagePanel";
+import useAuth from "@/hooks/useAuth";
 import useOutages from "@/hooks/useOutages";
-import type { OutageStatus } from "@/lib/mockData";
+import { mockHistory, mockOutages, type OutageStatus } from "@/lib/mockData";
 
 const OutageMap = dynamic(() => import("@/components/map/OutageMap"), {
   ssr: false,
 });
 
+type TileFilter = "emergency" | "pending" | "resolved";
+
 export default function AdminDashboardPage() {
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const { outages, updateOutageStatus, deleteOutage } = useOutages();
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [activePanel, setActivePanel] = useState<"list" | "map" | "manage">(
     "list",
   );
-  const [sidebarFilter, setSidebarFilter] = useState("all");
+  const [activeFilter, setActiveFilter] = useState<TileFilter | null>(null);
   const [flashMessage, setFlashMessage] = useState<string | null>(null);
+
   const selectedOutage =
     outages.find((outage) => outage.id === selectedId) || null;
-  const total = outages.length;
-  const active = outages.filter(
+  const sidebarFilter =
+    activeFilter === "pending" ? "needs_action" : (activeFilter ?? "all");
+  const emergencyCount = mockOutages.filter(
+    (outage) => outage.severity === "emergency",
+  ).length;
+  const pendingCount = mockOutages.filter(
     (outage) => outage.status !== "resolved",
   ).length;
-  const resolved = outages.filter(
+  const resolvedTodayCount = mockHistory.filter(
     (outage) => outage.status === "resolved",
   ).length;
-  const planned = outages.filter((outage) => outage.type === "planned").length;
 
   const handleStatusUpdate = (id: string, status: string, message: string) => {
     updateOutageStatus(id, status as OutageStatus, message);
     setFlashMessage("Update posted");
   };
-
   const handleDelete = (id: string) => {
     deleteOutage(id);
     setSelectedId(null);
+  };
+  const toggleTileFilter = (next: TileFilter) =>
+    setActiveFilter((current) => (current === next ? null : next));
+  const onSidebarFilterChange = (value: string) =>
+    setActiveFilter(
+      value === "all"
+        ? null
+        : value === "needs_action"
+          ? "pending"
+          : (value as "emergency" | "resolved"),
+    );
+  const handleLogout = () => {
+    logout();
+    router.push("/auth");
   };
 
   useEffect(() => {
@@ -54,48 +83,86 @@ export default function AdminDashboardPage() {
         <div className="flex items-center justify-between border-b border-[#e2e8f0] bg-[#ffffff] px-6 py-3">
           <div>
             <div className="flex items-center gap-2 font-mono font-bold text-[#0f172a]">
-              <ShieldCheck className="text-[#3b82f6]" size={16} /> Admin
-              Dashboard
+              <ShieldCheck className="text-[#3b82f6]" size={16} /> Urja Mitra —
+              Admin
             </div>
-            <div className="text-xs text-[#475569]">
-              Light Buddy — Pune Control Center
-            </div>
+            <div className="text-xs text-[#475569]">Pune Control Center</div>
           </div>
-          <div className="hidden items-center md:flex">
-            <div className="border-r border-[#e2e8f0] px-4 text-center">
-              <div className="font-mono text-sm font-bold text-[#0f172a]">
-                {total}
-              </div>
-              <div className="text-xs text-[#475569]">Total</div>
+          <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-1 text-sm text-[#ef4444] md:flex">
+              <Phone size={14} /> Emergency: 1800-212-3435
             </div>
-            <div className="border-r border-[#e2e8f0] px-4 text-center">
-              <div className="font-mono text-sm font-bold text-red-600">
-                {active}
-              </div>
-              <div className="text-xs text-[#475569]">Active</div>
+            <div className="hidden text-xs text-[#475569] md:block">
+              {user?.consumerId ?? "Admin"}
             </div>
-            <div className="border-r border-[#e2e8f0] px-4 text-center">
-              <div className="font-mono text-sm font-bold text-green-700">
-                {resolved}
-              </div>
-              <div className="text-xs text-[#475569]">Resolved</div>
-            </div>
-            <div className="pl-4 text-center">
-              <div className="font-mono text-sm font-bold text-[#1d4ed8]">
-                {planned}
-              </div>
-              <div className="text-xs text-[#475569]">Planned</div>
-            </div>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="cursor-pointer rounded-lg border border-[#e2e8f0] px-3 py-1.5 text-xs font-semibold text-[#475569] hover:bg-[#f8fafc]"
+            >
+              Logout
+            </button>
           </div>
         </div>
 
+        <div className="grid grid-cols-1 gap-4 px-4 py-4 md:grid-cols-3 md:mb-6">
+          <button
+            type="button"
+            onClick={() => toggleTileFilter("emergency")}
+            className={`cursor-pointer rounded-xl border-l-4 border-[#ef4444] bg-[#fee2e2] p-5 text-left ${emergencyCount > 0 ? "animate-pulse" : ""}`}
+          >
+            <div className="flex items-center justify-between">
+              <AlertTriangle size={28} color="#ef4444" />
+              <div className="text-4xl font-bold text-[#ef4444]">
+                {emergencyCount}
+              </div>
+            </div>
+            <div className="mt-2 text-sm font-semibold text-[#991b1b]">
+              Emergencies
+            </div>
+            <div className="text-xs text-[#475569]">Tap to view</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleTileFilter("pending")}
+            className="cursor-pointer rounded-xl border-l-4 border-[#f59e0b] bg-[#fef3c7] p-5 text-left"
+          >
+            <div className="flex items-center justify-between">
+              <Clock size={28} color="#f59e0b" />
+              <div className="text-4xl font-bold text-[#92400e]">
+                {pendingCount}
+              </div>
+            </div>
+            <div className="mt-2 text-sm font-semibold text-[#92400e]">
+              Need Action
+            </div>
+            <div className="text-xs text-[#475569]">Tap to view</div>
+          </button>
+          <button
+            type="button"
+            onClick={() => toggleTileFilter("resolved")}
+            className="cursor-pointer rounded-xl border-l-4 border-[#22c55e] bg-[#dcfce7] p-5 text-left"
+          >
+            <div className="flex items-center justify-between">
+              <CheckCircle size={28} color="#22c55e" />
+              <div className="text-4xl font-bold text-[#166534]">
+                {resolvedTodayCount}
+              </div>
+            </div>
+            <div className="mt-2 text-sm font-semibold text-[#166534]">
+              Resolved Today
+            </div>
+            <div className="text-xs text-[#475569]">Good work!</div>
+          </button>
+        </div>
+
         {flashMessage ? (
-          <div className="px-4 pt-3 text-center text-sm text-green-700 md:px-6">
+          <div className="px-4 pb-2 text-center text-sm text-green-700 md:px-6">
             {flashMessage}
           </div>
         ) : null}
 
-        <div className="md:hidden border-b border-[#e2e8f0] bg-[#ffffff] px-4 py-2">
+        <div className="border-b border-[#e2e8f0] bg-[#ffffff] px-4 py-2 md:hidden">
           <div className="flex gap-2">
             {(["list", "map", "manage"] as const).map((tab) => (
               <button
@@ -116,13 +183,14 @@ export default function AdminDashboardPage() {
               selectedId={selectedId}
               onSelect={setSelectedId}
               filter={sidebarFilter}
-              onFilterChange={setSidebarFilter}
+              activeFilter={activeFilter}
+              onFilterChange={onSidebarFilterChange}
             />
           </div>
-          <div className="animate-fade-in delay-200 opacity-0 flex-1">
+          <div className="animate-fade-in delay-200 flex-1 opacity-0">
             <OutageMap filter="all" />
           </div>
-          <div className="hidden w-96 border-l border-[#e2e8f0] bg-[#ffffff] lg:block animate-slide-in-right opacity-0">
+          <div className="hidden w-96 animate-slide-in-right border-l border-[#e2e8f0] bg-[#ffffff] opacity-0 lg:block">
             <OutageManagePanel
               outage={selectedOutage}
               onStatusUpdate={handleStatusUpdate}
@@ -138,7 +206,8 @@ export default function AdminDashboardPage() {
               selectedId={selectedId}
               onSelect={setSelectedId}
               filter={sidebarFilter}
-              onFilterChange={setSidebarFilter}
+              activeFilter={activeFilter}
+              onFilterChange={onSidebarFilterChange}
             />
           ) : activePanel === "map" ? (
             <div className="flex-1 p-4">

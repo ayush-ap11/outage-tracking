@@ -1,256 +1,386 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  Calendar,
+  ArrowRight,
   CheckCircle,
-  FileText,
+  CreditCard,
+  Gauge,
+  Home,
+  Loader2,
   LocateFixed,
-  LoaderCircle,
   MapPin,
-  Zap,
+  Phone,
+  Send,
 } from "lucide-react";
 import ProtectedRoute from "@/components/layout/ProtectedRoute";
+import OutageFormStepThree from "@/components/outage/OutageFormStepThree";
+import ReportSuccess from "@/components/outage/ReportSuccess";
+import StepIndicator from "@/components/report/StepIndicator";
+import StepTwo from "@/components/report/StepTwo";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
-import LoadingScreen from "@/components/ui/LoadingScreen";
-import ReportSuccess from "@/components/outage/ReportSuccess";
-import { useAuth } from "@/lib/authContext";
 import useGeoLocation from "@/hooks/useGeoLocation";
 import useOutages from "@/hooks/useOutages";
+import {
+  type ComplaintCategory,
+  type Severity,
+  getSeverityFromType,
+} from "@/lib/helpers";
 
-const ReportMap = dynamic(() => import("@/components/map/ReportMap"), {
-  ssr: false,
-  loading: () => <LoadingScreen message="Loading map..." />,
-});
-
-type OutageTypeChoice = "planned" | "unplanned" | null;
+type Step = 1 | 2 | 3;
+type IdentifierType = "phone" | "address" | "esi" | "meter";
 
 export default function ReportPage() {
   const router = useRouter();
-  const { user } = useAuth();
   const { addOutage } = useOutages();
-  const {
-    location: gpsLocation,
-    error: gpsError,
-    loading,
-    getLocation,
-  } = useGeoLocation();
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
-    null,
-  );
-  const [type, setType] = useState<OutageTypeChoice>(null);
-  const [description, setDescription] = useState("");
+  const [currentStep, setCurrentStep] = useState<Step>(1);
   const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [identifierType, setIdentifierType] = useState<IdentifierType>("phone");
+  const [identifierValue, setIdentifierValue] = useState("");
+  const [zipCode, setZipCode] = useState("");
+  const [gpsLocation, setGpsLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [gpsError, setGpsError] = useState<string | null>(null);
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const [showManualInput, setShowManualInput] = useState(false);
+  const [manualLat, setManualLat] = useState("");
+  const [manualLng, setManualLng] = useState("");
+  const [substationName, setSubstationName] = useState("");
+  const [feederZone, setFeederZone] = useState("");
+  const [dpTransformerNumber, setDpTransformerNumber] = useState("");
+  const [poleNumber, setPoleNumber] = useState("");
+  const [complaintCategory, setComplaintCategory] = useState<
+    ComplaintCategory | ""
+  >("");
+  const [complaintType, setComplaintType] = useState("");
+  const [severity, setSeverity] = useState<Severity | null>(null);
+  const [additionalDetails, setAdditionalDetails] = useState("");
+  const { location, error, loading, getLocation } = useGeoLocation();
 
-  useEffect(() => {
-    if (gpsLocation) setLocation(gpsLocation);
-  }, [gpsLocation]);
+  useEffect(() => setGpsLocation(location), [location]);
+  useEffect(() => setGpsError(error), [error]);
+  useEffect(() => setGpsLoading(loading), [loading]);
 
-  const submitReport = (): void => {
-    if (!location) return setError("Please select a location");
-    if (!type) return setError("Please select outage type");
+  const options = {
+    phone: {
+      title: "Phone Number",
+      subtitle: "Use the phone number associated with your account",
+      icon: Phone,
+      label: "Phone Number *",
+      placeholder: "e.g., +91 98XXXXXXXX",
+      type: "tel",
+    },
+    address: {
+      title: "Address",
+      subtitle: "Provide the complete street address",
+      icon: Home,
+      label: "Address *",
+      placeholder: "Enter street address",
+      type: "text",
+    },
+    esi: {
+      title: "ESI ID",
+      subtitle: "Found on your electricity bill",
+      icon: CreditCard,
+      label: "ESI ID *",
+      placeholder: "Found on your electricity bill",
+      type: "text",
+    },
+    meter: {
+      title: "Meter Number",
+      subtitle: "Located on your electric meter",
+      icon: Gauge,
+      label: "Meter Number *",
+      placeholder: "Located on your electric meter",
+      type: "text",
+    },
+  } as const;
+
+  const current = options[identifierType];
+  const hasManualLocation = manualLat.trim() !== "" && manualLng.trim() !== "";
+  const hasLocation = !!gpsLocation || hasManualLocation;
+  const nextDisabled = !identifierValue.trim() && !hasLocation;
+
+  const submitReport = () => {
+    const manualLocation =
+      manualLat.trim() && manualLng.trim()
+        ? { lat: Number(manualLat), lng: Number(manualLng) }
+        : null;
+    const finalLocation =
+      gpsLocation ||
+      (manualLocation &&
+      Number.isFinite(manualLocation.lat) &&
+      Number.isFinite(manualLocation.lng)
+        ? manualLocation
+        : null);
+    if (!finalLocation || submitting) return;
+    const normalizedSeverity = complaintType
+      ? getSeverityFromType(complaintType)
+      : severity;
+    const trimmedDetails = additionalDetails.trim();
+    const description =
+      [
+        complaintCategory ? `Category: ${complaintCategory}` : "",
+        trimmedDetails,
+      ]
+        .filter(Boolean)
+        .join(" - ") || "No additional details provided";
+
     setSubmitting(true);
-    window.setTimeout(() => {
-      addOutage({
-        lat: location.lat,
-        lng: location.lng,
-        type,
-        description: description.trim(),
-        reportedBy: user?.phone || "anonymous",
-        area: "Pune",
-      });
-      setSubmitted(true);
-      setError(null);
-      setSubmitting(false);
-    }, 350);
+    addOutage({
+      lat: finalLocation.lat,
+      lng: finalLocation.lng,
+      area: zipCode.trim() || "Pune",
+      complaintCategory: complaintCategory || "supply",
+      complaintType: complaintType || "complete_cut",
+      severity: normalizedSeverity || "moderate",
+      substationName,
+      feederName: feederZone,
+      dpNumber: dpTransformerNumber,
+      poleNumber,
+      description,
+      reportedBy: identifierValue.trim() || "anonymous",
+    });
+    setSubmitted(true);
+    setSubmitting(false);
   };
 
   return (
     <ProtectedRoute>
-      <div className="animate-fade-in min-h-[calc(100vh-64px)] bg-[#f8fafc] p-4 lg:p-6">
-        <div className="mx-auto max-w-7xl">
-          <button
-            onClick={() => router.back()}
-            type="button"
-            className="self-start cursor-pointer text-2xl text-[#475569] transition hover:text-[#0f172a]"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <div className="mt-2">
-            <h1 className="font-mono text-2xl font-bold text-[#0f172a]">
-              Report Outage
-            </h1>
-            <p className="mt-1 text-sm text-[#475569]">
-              Help your community by reporting power cuts
-            </p>
-          </div>
-
-          <div className="mt-5 flex flex-col gap-4 lg:flex-row">
-            <div className="order-1 w-full shrink-0 lg:w-96">
-              {submitted ? (
-                <ReportSuccess
-                  onViewMap={() => router.push("/map")}
-                  onReportAnother={() => {
-                    setSubmitted(false);
-                    setLocation(null);
-                    setType(null);
-                    setDescription("");
-                    setError(null);
-                  }}
-                />
-              ) : (
-                <div className="space-y-4">
-                  <Card className="animate-fade-in opacity-0 delay-100">
-                    <div className="mb-3 font-mono text-sm text-[#475569]">
-                      <MapPin
-                        className="mr-1 inline-block align-[-2px]"
-                        size={14}
-                      />{" "}
-                      Location
+      <div className="min-h-[calc(100vh-64px)] bg-[#f8fafc] p-4 lg:p-6">
+        <div className="mx-auto max-w-2xl">
+          {submitted ? (
+            <ReportSuccess
+              onViewMap={() => router.push("/map")}
+              onReportAnother={() => {
+                setSubmitted(false);
+                setCurrentStep(1);
+              }}
+            />
+          ) : (
+            <>
+              <StepIndicator currentStep={currentStep} />
+              <Card className="w-full space-y-6 p-6">
+                {currentStep === 1 ? (
+                  <>
+                    <div>
+                      <h1 className="text-xl font-bold text-[#0f172a]">
+                        What do you know about the location?
+                      </h1>
+                      <p className="text-sm text-[#64748b]">Select One</p>
+                    </div>
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                      {(
+                        Object.entries(options) as Array<
+                          [IdentifierType, (typeof options)[IdentifierType]]
+                        >
+                      ).map(([key, cfg]) => {
+                        const selected = identifierType === key;
+                        const Icon = cfg.icon;
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            onClick={() => {
+                              setIdentifierType(key);
+                              setIdentifierValue("");
+                              setZipCode("");
+                            }}
+                            className={`cursor-pointer rounded-xl border p-4 text-left transition-all hover:border-[#93c5fd] ${selected ? "border-[#2563eb] bg-blue-50" : "border-[#e2e8f0] bg-white"}`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <Icon
+                                size={20}
+                                className={
+                                  selected
+                                    ? "text-electric-blue"
+                                    : "text-[#64748b]"
+                                }
+                              />
+                              <div>
+                                <p className="font-semibold text-[#0f172a]">
+                                  {cfg.title}
+                                </p>
+                                <p className="text-xs text-[#64748b]">
+                                  {cfg.subtitle}
+                                </p>
+                              </div>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="space-y-3">
+                      <label className="block text-sm font-medium text-[#0f172a]">
+                        {current.label}
+                      </label>
+                      <input
+                        type={current.type}
+                        value={identifierValue}
+                        onChange={(e) => setIdentifierValue(e.target.value)}
+                        placeholder={current.placeholder}
+                        className="w-full rounded-lg border border-[#e2e8f0] px-4 py-3 font-mono text-sm focus:border-[#2563eb] focus:outline-none"
+                      />
+                      {identifierType === "address" ? (
+                        <>
+                          <label className="block text-sm font-medium text-[#0f172a]">
+                            Zip Code *
+                          </label>
+                          <input
+                            type="text"
+                            value={zipCode}
+                            onChange={(e) => setZipCode(e.target.value)}
+                            placeholder="Enter zip code"
+                            className="w-full rounded-lg border border-[#e2e8f0] px-4 py-3 font-mono text-sm focus:border-[#2563eb] focus:outline-none"
+                          />
+                        </>
+                      ) : null}
+                    </div>
+                    <div className="space-y-3">
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        className="w-full justify-center"
+                        onClick={getLocation}
+                        disabled={gpsLoading}
+                      >
+                        <LocateFixed size={18} />
+                        {gpsLoading ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" />
+                            Detecting location...
+                          </>
+                        ) : (
+                          "Detect My Location"
+                        )}
+                      </Button>
+                      {gpsLocation ? (
+                        <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-green-700">
+                          <div className="flex items-center gap-2 font-medium">
+                            <CheckCircle size={16} />
+                            Location detected
+                          </div>
+                          <p className="mt-1 font-mono text-xs">
+                            {gpsLocation.lat.toFixed(6)},{" "}
+                            {gpsLocation.lng.toFixed(6)}
+                          </p>
+                        </div>
+                      ) : null}
+                      {gpsError ? (
+                        <p className="text-sm text-red-600">{gpsError}</p>
+                      ) : null}
+                      <div className="flex justify-center items-center gap-1">
+                        <span className="text-xs text-[#475569]">
+                          Want to add exact coordinates?
+                        </span>
+                        <span
+                          className="cursor-pointer border-[#2563eb] underline font-bold text-[12px] text-[#2563eb]"
+                          onClick={() => setShowManualInput((v) => !v)}
+                        >
+                          {/* <MapPin size={10} /> */}
+                          Enter Coordinates
+                        </span>
+                      </div>
+                      {showManualInput ? (
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                          <input
+                            type="number"
+                            value={manualLat}
+                            onChange={(e) => setManualLat(e.target.value)}
+                            placeholder="Latitude"
+                            className="w-full rounded-lg border border-[#e2e8f0] px-4 py-3 font-mono text-sm focus:border-[#2563eb] focus:outline-none"
+                          />
+                          <input
+                            type="number"
+                            value={manualLng}
+                            onChange={(e) => setManualLng(e.target.value)}
+                            placeholder="Longitude"
+                            className="w-full rounded-lg border border-[#e2e8f0] px-4 py-3 font-mono text-sm focus:border-[#2563eb] focus:outline-none"
+                          />
+                        </div>
+                      ) : null}
                     </div>
                     <Button
-                      variant="outline"
+                      size="lg"
                       className="w-full justify-center"
-                      onClick={getLocation}
-                      disabled={loading}
+                      disabled={nextDisabled}
+                      onClick={() => setCurrentStep(2)}
                     >
-                      {loading ? (
-                        <span className="inline-flex items-center gap-2">
-                          <LoaderCircle className="animate-spin" size={16} />
-                          Detecting location...
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-2">
-                          <LocateFixed size={16} />
-                          Use My GPS Location
-                        </span>
-                      )}
+                      Next: Verify Information <ArrowRight size={18} />
                     </Button>
-                    {gpsError ? (
-                      <p className="mt-2 text-xs text-red-600">{gpsError}</p>
-                    ) : null}
-                    {location ? (
-                      <div className="mt-3 rounded-lg border border-green-500/30 bg-green-500/20 p-3">
-                        <div className="text-sm text-green-700">
-                          <CheckCircle
-                            className="mr-1 inline-block align-[-2px]"
-                            size={14}
-                          />{" "}
-                          Location detected
-                        </div>
-                        <div className="mt-1 font-mono text-xs text-[#1d4ed8]">
-                          Lat: {location.lat.toFixed(4)} | Lng:{" "}
-                          {location.lng.toFixed(4)}
-                        </div>
-                      </div>
-                    ) : null}
-                  </Card>
-
-                  <Card className="animate-fade-in opacity-0 delay-200">
-                    <div className="mb-3 font-mono text-sm text-[#475569]">
-                      <Zap
-                        className="mr-1 inline-block align-[-2px]"
-                        size={14}
-                      />{" "}
-                      Outage Type
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => setType("planned")}
-                        className={`active:scale-95 cursor-pointer w-full rounded-lg border p-3 font-mono text-sm transition-all duration-200 ${type === "planned" ? "border-[#2563eb] bg-[#2563eb] text-white" : "border-[#e2e8f0] bg-[#ffffff] text-[#475569] hover:border-[#2563eb]/50"}`}
-                      >
-                        <div className="inline-flex items-center gap-2">
-                          <Calendar size={14} /> Planned
-                        </div>
-                        <div className="text-xs opacity-70">
-                          Scheduled maintenance
-                        </div>
-                      </button>
-                      <button
-                        onClick={() => setType("unplanned")}
-                        className={`active:scale-95 cursor-pointer w-full rounded-lg border p-3 font-mono text-sm transition-all duration-200 ${type === "unplanned" ? "border-red-600 bg-red-600 text-white" : "border-[#e2e8f0] bg-[#ffffff] text-[#475569] hover:border-[#2563eb]/50"}`}
-                      >
-                        <div className="inline-flex items-center gap-2">
-                          <Zap size={14} /> Unplanned
-                        </div>
-                        <div className="text-xs opacity-70">
-                          Sudden power cut
-                        </div>
-                      </button>
-                    </div>
-                  </Card>
-
-                  <Card className="animate-fade-in opacity-0 delay-300">
-                    <div className="mb-3 font-mono text-sm text-[#475569]">
-                      <FileText
-                        className="mr-1 inline-block align-[-2px]"
-                        size={14}
-                      />{" "}
-                      Description (Optional)
-                    </div>
-                    <textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      maxLength={200}
-                      placeholder="e.g. Complete power cut since 7 AM, transformer issue near main road..."
-                      className="h-24 w-full resize-none rounded-lg border border-[#e2e8f0] bg-[#ffffff] px-4 py-3 text-sm text-[#0f172a] transition-all duration-200 placeholder-[#94a3b8] focus:border-[#2563eb] focus:outline-none focus:shadow-[0_0_0_2px_rgba(37,99,235,0.2)]"
+                  </>
+                ) : currentStep === 2 ? (
+                  <StepTwo
+                    substationName={substationName}
+                    feederZone={feederZone}
+                    dpTransformerNumber={dpTransformerNumber}
+                    poleNumber={poleNumber}
+                    onSubstationNameChange={setSubstationName}
+                    onFeederZoneChange={setFeederZone}
+                    onDpTransformerNumberChange={setDpTransformerNumber}
+                    onPoleNumberChange={setPoleNumber}
+                    onBack={() => setCurrentStep(1)}
+                    onNext={() => setCurrentStep(3)}
+                  />
+                ) : (
+                  <div className="space-y-4">
+                    <Button
+                      variant="ghost"
+                      className="cursor-pointer justify-start px-0"
+                      onClick={() => setCurrentStep(2)}
+                    >
+                      <ArrowLeft size={16} />
+                      Back
+                    </Button>
+                    <OutageFormStepThree
+                      complaintCategory={complaintCategory}
+                      complaintType={complaintType}
+                      severity={severity}
+                      onCategoryChange={(value) => {
+                        setComplaintCategory(value);
+                        setComplaintType("");
+                        setSeverity(null);
+                      }}
+                      onComplaintTypeChange={(value) => {
+                        setComplaintType(value);
+                        setSeverity(value ? getSeverityFromType(value) : null);
+                      }}
                     />
-                    <div className="mt-1 text-right text-xs text-[#475569]">
-                      {description.length}/200
+                    <div>
+                      <label className="mb-1 block text-sm text-[#475569]">
+                        Additional Details (Optional)
+                      </label>
+                      <textarea
+                        value={additionalDetails}
+                        onChange={(e) => setAdditionalDetails(e.target.value)}
+                        maxLength={200}
+                        placeholder="e.g. Power cut since 7 AM, affects 3 buildings..."
+                        className="h-28 w-full resize-none rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-[#0f172a] outline-none focus:ring-2 focus:ring-[#2563eb]"
+                      />
+                      <p className="mt-1 text-xs text-[#475569]">
+                        {additionalDetails.length}/200 characters
+                      </p>
                     </div>
-                  </Card>
-
-                  {error ? (
-                    <div className="text-center text-sm text-red-600">
-                      {error}
-                    </div>
-                  ) : null}
-
-                  <Button
-                    size="lg"
-                    className="animate-fade-in w-full justify-center opacity-0 delay-400"
-                    onClick={submitReport}
-                    disabled={submitting}
-                  >
-                    {submitting ? (
-                      <span className="inline-flex items-center gap-2">
-                        <LoaderCircle className="animate-spin" size={16} />
-                        Submitting...
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-2">
-                        <Zap size={16} /> Submit Report
-                      </span>
-                    )}
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            <div className="order-2 flex-1 lg:min-h-0">
-              <div
-                className="rounded-xl border border-[#e2e8f0] bg-[#ffffff] p-3 lg:h-[min(70vh,680px)]"
-                style={{ height: 280 }}
-              >
-                <ReportMap
-                  location={location}
-                  onLocationChange={(lat, lng) => {
-                    setLocation({ lat, lng });
-                    setError(null);
-                  }}
-                />
-                <p className="mt-2 text-center text-xs text-[#475569]">
-                  Tap the map to place your outage pin
-                </p>
-              </div>
-            </div>
-          </div>
+                    <Button
+                      size="lg"
+                      className="w-full cursor-pointer justify-center"
+                      disabled={submitting}
+                      onClick={submitReport}
+                    >
+                      {submitting ? "Submitting..." : "Submit Report"}
+                      <Send size={16} />
+                    </Button>
+                  </div>
+                )}
+              </Card>
+            </>
+          )}
         </div>
       </div>
     </ProtectedRoute>

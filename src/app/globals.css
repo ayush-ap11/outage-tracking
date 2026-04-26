@@ -1,7 +1,9 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 /* ── Light Electric Blue Theme ── */
 :root {
+  font-family: var(--font-roboto), "Roboto", sans-serif;
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
   --bg-card: #ffffff;

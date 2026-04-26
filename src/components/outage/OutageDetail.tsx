@@ -18,6 +18,9 @@ export default function OutageDetail({
   showConfirmButton = true,
 }: OutageDetailProps) {
   const count = getConfirmationCount(outage.confirmations);
+  const displayType =
+    outage.type ??
+    (outage.complaintCategory === "scheduled" ? "planned" : "unplanned");
   return (
     <Card className="p-5">
       <div className="flex items-start justify-between gap-3">
@@ -25,7 +28,7 @@ export default function OutageDetail({
           {outage.area}
         </h2>
         <div className="flex gap-2">
-          <Badge variant={outage.type}>{outage.type}</Badge>
+          <Badge variant={displayType}>{displayType}</Badge>
           <Badge variant={outage.status}>{outage.status}</Badge>
         </div>
       </div>

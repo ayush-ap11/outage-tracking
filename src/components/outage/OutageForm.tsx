@@ -1,114 +1,171 @@
 "use client";
 
-import { useState } from "react";
-import Button from "../ui/Button";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "@/lib/authContext";
+import {
+  type ComplaintCategory,
+  type Severity,
+  getSeverityFromType,
+} from "@/lib/helpers";
+import useGeoLocation from "@/hooks/useGeoLocation";
+import useOutages from "@/hooks/useOutages";
+import OutageFormStepFour from "./OutageFormStepFour";
+import OutageFormStepOne from "./OutageFormStepOne";
+import OutageFormStepThree from "./OutageFormStepThree";
+import OutageFormStepTwo from "./OutageFormStepTwo";
+import type { OutageFormProps, OutageFormValues } from "./OutageForm.types";
 
-export interface OutageFormValues {
-  title: string;
-  description: string;
-  severity: string;
-  type: string;
-  location: string;
-}
+export type { OutageFormValues } from "./OutageForm.types";
 
-export interface OutageFormProps {
-  onSubmit?: (values: OutageFormValues) => void;
-}
+const parseLocation = (lat: string, lng: string) => {
+  if (lat.trim() === "" || lng.trim() === "") return null;
+  const parsedLat = Number(lat);
+  const parsedLng = Number(lng);
+  return Number.isFinite(parsedLat) && Number.isFinite(parsedLng)
+    ? { lat: parsedLat, lng: parsedLng }
+    : null;
+};
 
 export default function OutageForm({ onSubmit }: OutageFormProps) {
-  const [formData, setFormData] = useState<OutageFormValues>({
-    title: "",
-    description: "",
-    severity: "minor",
-    type: "power",
-    location: "",
-  });
+  const { user } = useAuth();
+  const { addOutage } = useOutages();
+  const {
+    location: gpsLocation,
+    error: gpsError,
+    loading: gpsLoading,
+    getLocation,
+  } = useGeoLocation();
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    null,
+  );
+  const [manualLat, setManualLat] = useState("");
+  const [manualLng, setManualLng] = useState("");
+  const [selectedSubstation, setSelectedSubstation] = useState("");
+  const [selectedFeeder, setSelectedFeeder] = useState("");
+  const [selectedDP, setSelectedDP] = useState("");
+  const [poleNumber, setPoleNumber] = useState("");
+  const [complaintCategory, setComplaintCategory] = useState<
+    ComplaintCategory | ""
+  >("");
+  const [complaintType, setComplaintType] = useState("");
+  const [severity, setSeverity] = useState<Severity | null>(null);
+  const [description, setDescription] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const currentLocation = useMemo(
+    () => parseLocation(manualLat, manualLng) ?? location,
+    [manualLat, manualLng, location],
+  );
 
-  const handleChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >,
-  ): void => {
-    setFormData((previous) => ({
-      ...previous,
-      [event.target.name]: event.target.value,
-    }));
-  };
+  useEffect(() => {
+    getLocation();
+  }, [getLocation]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
-    event.preventDefault();
-    onSubmit?.(formData);
+  useEffect(() => {
+    if (!gpsLocation) return;
+    setLocation(gpsLocation);
+    setManualLat(String(gpsLocation.lat));
+    setManualLng(String(gpsLocation.lng));
+  }, [gpsLocation]);
+
+  const submit = (): void => {
+    if (!currentLocation || !complaintCategory) return;
+    const normalizedSeverity = complaintType
+      ? getSeverityFromType(complaintType)
+      : severity;
+    const values: OutageFormValues = {
+      location: currentLocation,
+      manualLat,
+      manualLng,
+      selectedSubstation,
+      selectedFeeder,
+      selectedDP,
+      poleNumber,
+      complaintCategory,
+      complaintType,
+      severity: normalizedSeverity,
+      description: description.trim(),
+    };
+    setSubmitting(true);
+    addOutage({
+      lat: currentLocation.lat,
+      lng: currentLocation.lng,
+      area: "Pune",
+      complaintCategory: values.complaintCategory || "supply",
+      complaintType: values.complaintType || "complete_cut",
+      severity: values.severity || "moderate",
+      substationName: values.selectedSubstation,
+      feederName: values.selectedFeeder,
+      dpNumber: values.selectedDP,
+      poleNumber: values.poleNumber,
+      description: values.description,
+      reportedBy: user?.phone || "anonymous",
+    });
+    onSubmit?.(values);
+    setSubmitting(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="mb-1 block text-sm font-medium text-text-secondary">
-          Title
-        </label>
-        <input
-          name="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-border bg-bg-elevated px-3 py-2 text-sm text-text-primary outline-none focus:border-electric-blue"
-          placeholder="Brief outage title"
-          required
-        />
-      </div>
-
-      <div>
-        <label className="mb-1 block text-sm font-medium text-text-secondary">
-          Description
-        </label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          rows={3}
-          className="resize-none rounded-lg border border-border bg-bg-elevated px-3 py-2 text-sm text-text-primary outline-none focus:border-electric-blue"
-          placeholder="Describe the outage..."
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="mb-1 block text-sm font-medium text-text-secondary">
-            Severity
-          </label>
-          <select
-            name="severity"
-            value={formData.severity}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-border bg-bg-elevated px-3 py-2 text-sm text-text-primary outline-none focus:border-electric-blue"
-          >
-            <option value="minor">Minor</option>
-            <option value="major">Major</option>
-            <option value="critical">Critical</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="mb-1 block text-sm font-medium text-text-secondary">
-            Type
-          </label>
-          <select
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-border bg-bg-elevated px-3 py-2 text-sm text-text-primary outline-none focus:border-electric-blue"
-          >
-            <option value="power">Power</option>
-            <option value="internet">Internet</option>
-            <option value="water">Water</option>
-            <option value="gas">Gas</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-      </div>
-
-      <Button type="submit" className="w-full">
-        Submit Report
-      </Button>
+    <form
+      className="space-y-4"
+      onSubmit={(event) => {
+        event.preventDefault();
+        submit();
+      }}
+    >
+      <OutageFormStepOne
+        location={currentLocation}
+        manualLat={manualLat}
+        manualLng={manualLng}
+        gpsLoading={gpsLoading}
+        gpsError={gpsError}
+        onManualLatChange={(value) => {
+          setManualLat(value);
+          setLocation(parseLocation(value, manualLng));
+        }}
+        onManualLngChange={(value) => {
+          setManualLng(value);
+          setLocation(parseLocation(manualLat, value));
+        }}
+        onMapLocationChange={(lat, lng) => {
+          setLocation({ lat, lng });
+          setManualLat(String(lat));
+          setManualLng(String(lng));
+        }}
+      />
+      <OutageFormStepTwo
+        selectedSubstation={selectedSubstation}
+        selectedFeeder={selectedFeeder}
+        selectedDP={selectedDP}
+        poleNumber={poleNumber}
+        onSubstationChange={(value) => {
+          setSelectedSubstation(value);
+          setSelectedFeeder("");
+        }}
+        onFeederChange={setSelectedFeeder}
+        onDPChange={setSelectedDP}
+        onPoleNumberChange={setPoleNumber}
+      />
+      <OutageFormStepThree
+        complaintCategory={complaintCategory}
+        complaintType={complaintType}
+        severity={severity}
+        onCategoryChange={(value) => {
+          setComplaintCategory(value);
+          setComplaintType("");
+          setSeverity(null);
+        }}
+        onComplaintTypeChange={(value) => {
+          setComplaintType(value);
+          setSeverity(value ? getSeverityFromType(value) : null);
+        }}
+      />
+      <OutageFormStepFour
+        description={description}
+        canSubmit={Boolean(currentLocation) || Boolean(complaintCategory)}
+        onDescriptionChange={setDescription}
+        onSubmit={submit}
+        submitting={submitting}
+      />
     </form>
   );
 }

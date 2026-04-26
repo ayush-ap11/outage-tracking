@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export interface GeoLocation {
   lat: number;
@@ -19,7 +19,7 @@ export default function useGeoLocation(): GeoLocationHookResult {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const getLocation = (): void => {
+  const getLocation = useCallback((): void => {
     if (typeof navigator === "undefined" || !navigator.geolocation) {
       setError("Geolocation is not supported by your browser");
       return;
@@ -39,7 +39,7 @@ export default function useGeoLocation(): GeoLocationHookResult {
       },
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 300000 },
     );
-  };
+  }, []);
 
   return { location, error, loading, getLocation };
 }
