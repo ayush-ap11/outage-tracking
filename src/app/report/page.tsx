@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -31,7 +31,7 @@ import {
 } from "@/lib/helpers";
 
 type Step = 1 | 2 | 3;
-type IdentifierType = "phone" | "address" | "esi" | "meter";
+type IdentifierType = "phone" | "address" | "consumer" | "meter";
 
 export default function ReportPage() {
   const router = useRouter();
@@ -51,6 +51,9 @@ export default function ReportPage() {
   const [showManualInput, setShowManualInput] = useState(false);
   const [manualLat, setManualLat] = useState("");
   const [manualLng, setManualLng] = useState("");
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoName, setPhotoName] = useState("");
+  const photoInputRef = useRef<HTMLInputElement | null>(null);
   const [substationName, setSubstationName] = useState("");
   const [feederZone, setFeederZone] = useState("");
   const [dpTransformerNumber, setDpTransformerNumber] = useState("");
@@ -84,12 +87,12 @@ export default function ReportPage() {
       placeholder: "Enter street address",
       type: "text",
     },
-    esi: {
-      title: "ESI ID",
+    consumer: {
+      title: "Consumer Number",
       subtitle: "Found on your electricity bill",
       icon: CreditCard,
-      label: "ESI ID *",
-      placeholder: "Found on your electricity bill",
+      label: "Consumer Number *",
+      placeholder: "Enter your Consumer Number (from MSEDCL bill)",
       type: "text",
     },
     meter: {
@@ -106,6 +109,27 @@ export default function ReportPage() {
   const hasManualLocation = manualLat.trim() !== "" && manualLng.trim() !== "";
   const hasLocation = !!gpsLocation || hasManualLocation;
   const nextDisabled = !identifierValue.trim() && !hasLocation;
+
+  const onPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith("image/")) {
+      setPhotoPreview(null);
+      setPhotoName("");
+      return;
+    }
+    setPhotoName(file.name);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPhotoPreview(typeof reader.result === "string" ? reader.result : null);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const onRemovePhoto = () => {
+    setPhotoPreview(null);
+    setPhotoName("");
+    if (photoInputRef.current) photoInputRef.current.value = "";
+  };
 
   const submitReport = () => {
     const manualLocation =
@@ -306,13 +330,46 @@ export default function ReportPage() {
                         </div>
                       ) : null}
                     </div>
+                    <div className="space-y-3">
+                      <label className="block text-sm font-medium text-[#0f172a]">
+                        Upload Photo (Optional)
+                      </label>
+                      <input
+                        ref={photoInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={onPhotoChange}
+                        className="block w-full cursor-pointer rounded-lg border border-[#e2e8f0] bg-white px-3 py-2 text-sm text-[#0f172a] file:mr-3 file:cursor-pointer file:rounded-md file:border-0 file:bg-[#2563eb] file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white"
+                      />
+                      {photoPreview ? (
+                        <div className="rounded-lg border border-[#e2e8f0] bg-white p-3">
+                          <div className="mb-2 flex items-center justify-between gap-2">
+                            <p className="truncate text-xs text-[#475569]">
+                              {photoName}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={onRemovePhoto}
+                              className="text-xs font-semibold text-red-600 underline"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                          <img
+                            src={photoPreview}
+                            alt="Selected upload preview"
+                            className="h-24 w-24 rounded-md border border-[#e2e8f0] object-cover"
+                          />
+                        </div>
+                      ) : null}
+                    </div>
                     <Button
                       size="lg"
                       className="w-full justify-center"
                       disabled={nextDisabled}
                       onClick={() => setCurrentStep(2)}
                     >
-                      Next: Verify Information <ArrowRight size={18} />
+                      Next: Add Details <ArrowRight size={18} />
                     </Button>
                   </>
                 ) : currentStep === 2 ? (

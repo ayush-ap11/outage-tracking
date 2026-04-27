@@ -89,32 +89,32 @@ export default function StepTwo({
       <Card className="space-y-4 p-6">
         <div className="inline-flex items-center gap-1.5 rounded-md bg-[#f1f5f9] px-2 py-1 text-xs text-[#64748b]">
           <Info size={13} />
-          Fill what you know - all fields optional
+          Add More Details
         </div>
         <div className="space-y-3">
           <InputField
-            label="Substation Name"
+            label="Substation Name (Optional)"
             placeholder="e.g. Kothrud Substation"
             value={substationName}
             onChange={onSubstationNameChange}
             Icon={Building2}
           />
           <InputField
-            label="Feeder / Zone"
+            label="Feeder / Zone (Optional)"
             placeholder="e.g. Feeder 3 / Zone B"
             value={feederZone}
             onChange={onFeederZoneChange}
             Icon={GitBranch}
           />
           <InputField
-            label="DP Transformer Number"
+            label="DP Transformer Number (Optional)"
             placeholder="e.g. DT-4521"
             value={dpTransformerNumber}
             onChange={onDpTransformerNumberChange}
             Icon={Zap}
           />
           <InputField
-            label="Pole Number"
+            label="Pole Number (Optional)"
             placeholder="e.g. P-112"
             value={poleNumber}
             onChange={onPoleNumberChange}

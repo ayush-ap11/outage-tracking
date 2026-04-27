@@ -8,7 +8,7 @@ interface StepIndicatorProps {
 
 const STEPS = [
   { id: 1 as Step, label: "Identify Location", Icon: MapPin },
-  { id: 2 as Step, label: "Verify Information", Icon: FileText },
+  { id: 2 as Step, label: "Add Details", Icon: FileText },
   { id: 3 as Step, label: "Report Outage", Icon: Send },
 ];
 
